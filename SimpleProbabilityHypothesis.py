@@ -60,5 +60,4 @@ if __name__ == "__main__":
 
     run_tests(hypothesis, 5000)
 
-    print("Hypothesis passive p-value:" + str(hypothesis.p_value()))
-    print("True passive p-value      :" + str(passive_probability()))
+    print("Hypothesis p-value :" + str(hypothesis.p_value()))

@@ -79,6 +79,7 @@ def run_tests(hypothesis, trials=100):
     print('Score        : ' + str(score))
     print('Success Rate : ' + str(score / max_score))
     print('')
+    print('True passive p-value : ' + str(passive_probability()))
 
 
 
