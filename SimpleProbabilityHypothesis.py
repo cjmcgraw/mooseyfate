@@ -34,10 +34,10 @@ class SimpleProbabilityHypothesis(Hypothesis):
 
 if __name__ == "__main__":
 
-    from TestingEnvironment import monster_generator, run_tests
+    from TestingEnvironment import monster_generator, run_tests, aggro_probability, passive_probability 
 
     # Initial training period
-    hypothesis = AdaptiveDistributionHypothesis()
+    hypothesis = SimpleProbabilityHypothesis()
     monsters = monster_generator()
 
     for x in range(100):
@@ -47,5 +47,5 @@ if __name__ == "__main__":
 
     run_tests(hypothesis, 5000)
 
-    print(vars(hypothesis))
-    print(hypothesis.p_value())
+    print("Hypothesis passive p-value:" + str(hypothesis.p_value()))
+    print("True passive p-value      :" + str(passive_probability()))
