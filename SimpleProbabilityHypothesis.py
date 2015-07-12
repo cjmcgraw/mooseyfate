@@ -14,6 +14,11 @@ class SimpleProbabilityHypothesis(Hypothesis):
         self._training_hits = 0.0
 
     def fitness(self):
+        # Fitness returns 1.0 for sanity check
+        # If algorithm ever produces anything
+        # useful then we will use a rolling window
+        # and a comparison of the squared
+        # expected values to make sense of the fitness
         return 1.0
 
     def get_guess(self, vector):
@@ -22,6 +27,14 @@ class SimpleProbabilityHypothesis(Hypothesis):
         return False
 
     def update(self, vector, attacked, outcome):
+        # Currently using naive case of automatic
+        # updating every iteration. This is for a
+        # sanity check. 
+        # 
+        # If sanity check passes then we can update
+        # based off of distance of expected values
+        # using the standard measurement for the
+        # poisson distribution
         if attacked:
             if outcome == 1:
                 self._training_hits += 1
@@ -34,7 +47,7 @@ class SimpleProbabilityHypothesis(Hypothesis):
 
 if __name__ == "__main__":
 
-    from TestingEnvironment import monster_generator, run_tests, aggro_probability, passive_probability 
+    from TestingEnvironment import monster_generator, run_tests, aggro_probability, passive_probability
 
     # Initial training period
     hypothesis = SimpleProbabilityHypothesis()
