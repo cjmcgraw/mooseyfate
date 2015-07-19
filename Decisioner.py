@@ -84,9 +84,26 @@ class Decisioner:
             hypothesis.update(vector, attacked, outcome)
 
 if __name__ == "__main__":
-    decisioner = Decisioner([])
+    from hypothesis.WimpyHypothesis import WimpyHypothesis
+    from hypothesis.BraveHypothesis import BraveHypothesis
 
-    for monster in get_monsters():
+    from lib.TestingEnvironment import monster_generator
+
+    brave = BraveHypothesis()
+    wimpy = WimpyHypothesis()
+
+    decisioner = Decisioner([brave, wimpy])
+
+    genny = monster_generator()
+    monsters = [next(genny) for x in range(100)]
+
+    for monster in monsters:
         should_attack = decisioner.should_attack(monster)
         outcome = act_on_monster(monster, should_attack)
         decisioner.learn(monster, should_attack, outcome)
+
+    print(vars(decisioner))
+    print('')
+    print('Brave hypothesis: ' + str(vars(decisioner.all_hypothesis[0])))
+    print('')
+    print('Wimpy hypothesis: ' + str(vars(decisioner.all_hypothesis[1])))
