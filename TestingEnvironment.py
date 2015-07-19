@@ -45,8 +45,8 @@ class Monster(object):
 def monster_generator():
     """Provides a generator for monsters"""
     while True:
-        color = random()
-        if color <= COLOR_CATEGORY_1:
+        color = randint(1, 100)
+        if (color / 100.0) <= COLOR_CATEGORY_1:
             if random() <= COLOR_CATEGORY_1_AGGRO:
                 yield Monster(1, color, 'A')
             else:
