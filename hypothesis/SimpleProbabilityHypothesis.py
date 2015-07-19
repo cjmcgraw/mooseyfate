@@ -47,7 +47,7 @@ class SimpleProbabilityHypothesis(Hypothesis):
 
 if __name__ == "__main__":
 
-    from TestingEnvironment import monster_generator, run_tests, aggro_probability, passive_probability
+    from ..lib.TestingEnvironment import monster_generator, run_tests, aggro_probability, passive_probability
 
     # Initial training period
     hypothesis = SimpleProbabilityHypothesis()
