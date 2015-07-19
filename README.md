@@ -1,4 +1,5 @@
 To run the specific modules for your project execute them using pythons module command above the root of the project:
+`
 [~/workspace/lab/ml]$ tree
 .
 └── mooseyfate
@@ -29,3 +30,4 @@ To run the specific modules for your project execute them using pythons module c
 3 directories, 21 files
 
 [~/workspace/lab/ml]$ python -m mooseyfate.hypothesis.KMeansHypothesis
+`
