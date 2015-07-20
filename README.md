@@ -46,7 +46,6 @@ To run unit tests simply use pythons setup method:
 
 ```
 [~/workspace/lab/ml/mooseyfate]$ python setup.py test
-```
 running test
 running egg_info
 writing pbr to mooseyfate.egg-info/pbr.json
