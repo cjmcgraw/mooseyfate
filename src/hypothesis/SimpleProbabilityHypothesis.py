@@ -12,6 +12,10 @@ class SimpleProbabilityHypothesis(Hypothesis):
     def __init__(self):
         self._training_n = 0
         self._training_hits = 0.0
+        self.name = "SimpleProbabilityHypothesis"
+
+    def getName(self):
+        return self.name;
 
     def fitness(self):
         # Fitness returns 1.0 for sanity check

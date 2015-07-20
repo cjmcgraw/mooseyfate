@@ -84,15 +84,23 @@ class Decisioner:
             hypothesis.update(vector, attacked, outcome)
 
 if __name__ == "__main__":
-    from hypothesis.WimpyHypothesis import WimpyHypothesis
-    from hypothesis.BraveHypothesis import BraveHypothesis
+    from hypothesis.HypothesisCollection import HypothesisCollection
+    """from hypothesis.WimpyHypothesis import WimpyHypothesis"""
+    """from hypothesis.BraveHypothesis import BraveHypothesis"""
 
     from lib.TestingEnvironment import monster_generator
 
-    brave = BraveHypothesis()
-    wimpy = WimpyHypothesis()
+    """brave = BraveHypothesis()"""
+    """wimpy = WimpyHypothesis()"""
+    hypoCollection = HypothesisCollection()
+    hypoArray = hypoCollection.getHypothesisArray()
+    print("-------- Hypothesis Names --------")
+    for hypo in hypoArray:
+        print(hypo.getName())
+    print("-------- ================ --------")
 
-    decisioner = Decisioner([brave, wimpy])
+
+    decisioner = Decisioner(hypoArray)
 
     genny = monster_generator()
     monsters = [next(genny) for x in range(100)]

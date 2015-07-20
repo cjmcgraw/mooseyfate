@@ -15,12 +15,18 @@ class ChunkyWimpyHypothesis(Hypothesis):
         self._n = 0
         self._amountWeWereAttacked = 0
         self._amountWeRanAway = 0
-        self.__arrayOfTimesWeWereAttacked = array('i', [0, 0, 0, 0, 0])
-        self.__arrayOfTimesWeRanAway = array('i', [1, 1, 1, 1, 1])
-        self.__chunkCardinality = len(__arrayOfTimesWeRanAway)
+        self.__arrayOfTimesWeWereAttacked = [0, 0, 0, 0, 0]
+        self.__arrayOfTimesWeRanAway = [1, 1, 1, 1, 1]
+        self.__chunkCardinality = len(self.__arrayOfTimesWeRanAway)
         self.__currentChunk = 0
+        self.name = "ChunkyWimpy"
+
+    def getName(self):
+        return self.name;
 
     def fitness(self):
+        if 0 == sum(self.__arrayOfTimesWeRanAway) :
+            return 0
         chunkedWimpyFitness = sum(self.__arrayOfTimesWeWereAttacked) / sum(self.__arrayOfTimesWeRanAway)
         return chunkedWimpyFitness
 
@@ -33,7 +39,7 @@ class ChunkyWimpyHypothesis(Hypothesis):
         """If we're attacked record it. Know that we would've run away, yo."""
         if attacked:
             self.__arrayOfTimesWeWereAttacked[self.__currentChunk] = 1
-        else
+        else:
             self.__arrayOfTimesWeWereAttacked[self.__currentChunk] = 0
 
         """We always run away """

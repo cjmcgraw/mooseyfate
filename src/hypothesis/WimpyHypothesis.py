@@ -16,8 +16,14 @@ class WimpyHypothesis(Hypothesis):
         self._n = 0
         self._amountWeWereAttacked = 0
         self._amountWeRanAway = 0
+        self.name = "WimpyHypothesis"
+
+    def getName(self):
+        return self.name;
 
     def fitness(self):
+        if self._amountWeRanAway == 0:
+            return 0;
         wimpyFitness = self._amountWeWereAttacked / self._amountWeRanAway
         return wimpyFitness
 
@@ -27,11 +33,13 @@ class WimpyHypothesis(Hypothesis):
         return False
 
     def update(self, vector, attacked, outcome):
-        """If we're attacked record it. Know that we would've run away, yo."""
+          """If we're attacked record it. Know that we would've run away, yo."""
         if attacked:
-            self.__amountAttacked__ = self.__amountAttacked__ + 1
+            self._amountWeWereAttacked = self._amountWeWereAttacked + 1
 
         """We always run away """
-        self.__amountWeRanAway__ = self.__amountWeRanAway__ + 1
+        self._amountWeRanAway = self._amountWeRanAway + 1
+        self._n += 1
+        return 0
 
         return 0

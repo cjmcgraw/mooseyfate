@@ -4,7 +4,7 @@ determined
 """
 from random import randint
 
-from ..lib.HelperFunctions import euclidean_distance
+from lib.HelperFunctions import euclidean_distance
 from Hypothesis import Hypothesis
 
 class KMeansHypothesis(Hypothesis):
@@ -12,6 +12,10 @@ class KMeansHypothesis(Hypothesis):
     def __init__(self, dim, k):
         self._centroids = [[randint(1, 100) for d in range(dim)] for x in range(k)]
         self._points = {i : [] for i in range(k)}
+        self.name = "KMeansHypothesis"
+
+    def getName(self):
+        return self.name;
 
     def fitness(self):
         pass
