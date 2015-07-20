@@ -1,7 +1,7 @@
 from math import sqrt
 import unittest
 
-from ...lib.HelperFunctions import euclidean_distance
+from src.lib.HelperFunctions import euclidean_distance
 
 class HelperFunctionsTest(unittest.TestCase):
 

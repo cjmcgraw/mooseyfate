@@ -7,10 +7,6 @@ class Hypothesis:
 
     __metaclass__ = ABCMeta
 
-    def __init__(self):
-        """ Initialize with initialization bias """
-        pass
-
     @abstractmethod
     def fitness(self):
         """Retrieves a float representing the fitness of
