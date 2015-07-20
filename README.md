@@ -1,15 +1,8 @@
 To run the specific modules for your project execute them using pythons module command above the root of the project:
 ```
-[~/workspace/lab/ml]$ tree | grep -v 'pyc'
+[~/workspace/lab/ml]$ tree -I '.*egg-info|.*pyc|__init.*'
 .
 └── mooseyfate
-    ├── __init__.py
-    ├── mooseyfate.egg-info
-    │   ├── dependency_links.txt
-    │   ├── pbr.json
-    │   ├── PKG-INFO
-    │   ├── SOURCES.txt
-    │   └── top_level.txt
     ├── README.md
     ├── setup.py
     ├── src
@@ -18,26 +11,20 @@ To run the specific modules for your project execute them using pythons module c
     │   │   ├── BraveHypothesis.py
     │   │   ├── ChunkyWimpyHypothesis.py
     │   │   ├── Hypothesis.py
-    │   │   ├── __init__.py
     │   │   ├── KMeansHypothesis.py
     │   │   ├── SimpleProbabilityHypothesis.py
-    │   │   ├── WimpyHypothesis.py
-    │   ├── __init__.py
+    │   │   └── WimpyHypothesis.py
     │   └── lib
     │       ├── HelperFunctions.py
-    │       ├── __init__.py
-    │       ├── TestingEnvironment.py
+    │       └── TestingEnvironment.py
     └── test
         ├── DecisionerTest.py
         ├── hypothesis
-        │   ├── __init__.py
-        │   ├── MockHypothesis.py
-        ├── __init__.py
+        │   └── MockHypothesis.py
         └── lib
-            ├── HelperFunctionsTest.py
-            ├── __init__.py
+            └── HelperFunctionsTest.py
 
-8 directories, 44 files
+7 directories, 14 files
 
 [~/workspace/lab/ml]$ python -m mooseyfate.src.hypothesis.KMeansHypothesis
 ```
@@ -71,3 +58,4 @@ Ran 5 tests in 0.001s
 
 OK
 ```
+
