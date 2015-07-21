@@ -62,6 +62,11 @@ class DrPerceptron(Hypothesis):
 
 
     def _classifier(self, n):
+        """
+        Return true or false based on a vector
+        :param n: vector to classify
+        :return:
+        """
         result = dot_product(self._inputWindow, self._weights)
         #print ("DBG PERCEPTRON: " + str(self._weights))
         #print ("DBG PERCEPTRON: " + str(result))
@@ -82,20 +87,25 @@ class DrPerceptron(Hypothesis):
     def update(self, vector, attacked, outcome):
         """
         Given a vector update the training matrix
+        Algorithm
+         # 1.) update fitness
+         # 2.) add new data into a modded universe
+         # 3.) add the new chunk
+         # 4.) train
         :param vector: a vector of inputs of 0 - n
         :param attacked: 0 or 1
         :param outcome: -1 or 1
         :return: True
         """
 
-        # update fitness
+        # 1.) update fitness
         boolOutcome = False if outcome==-1 else True
         guess = self.get_guess(vector)
         if guess == boolOutcome:
             self._wins += 1
         self._n += 1
 
-        # add new data into a modded universe
+        # 2.) add new data into a modded universe
         for num in vector:
             # Note: there's a potential to set the following input to += num as a magnitude in a
             #       modded universe
@@ -103,9 +113,9 @@ class DrPerceptron(Hypothesis):
             self._inputIdx = (self._inputIdx + 1) % self._inputSize
             #print ("DBG PERCEPTRON: INDEX" + str(+self._inputIdx))
 
-        # add the new chunk
+        # 3.) add the new chunk
         training_chunk = (self._inputWindow, boolOutcome)
         self._training_set.append(training_chunk)
 
-        # train
+        # 4.) train
         return self._train()
