@@ -7,6 +7,7 @@ from Hypothesis import Hypothesis
 class BraveHypothesis(Hypothesis):
 
     def __init__(self):
+        self.name = "Brave"
         self._n = 0
         self._hits = 0.0
 
@@ -31,3 +32,6 @@ class BraveHypothesis(Hypothesis):
         if attacked and outcome == 1:
             self._hits += 1
         self._n += 1
+
+    def getName(self):
+        return self.name;
