@@ -45,9 +45,11 @@ class Decisioner:
         5. Update all Hypothesis with the result
     """
 
-    def __init__(self, hypothesis):
+    def __init__(self, hypothesis, training_window=101):
         """Initializes the Decisioner """
         self.all_hypothesis = hypothesis
+        self._window = training_window
+        self._n = 0
 
     def get_best_fit_hypothesis(self):
         """Gets the hypothesis that is the best fit
@@ -65,6 +67,8 @@ class Decisioner:
 
         :return: bool
         """
+        if self._n < self._window:
+            return True
         best_hypothesis = self.get_best_fit_hypothesis()
         return best_hypothesis.get_guess(vector)
 
@@ -82,6 +86,7 @@ class Decisioner:
         """
         for hypothesis in self.all_hypothesis:
             hypothesis.update(vector, attacked, outcome)
+        self._n += 1
 
 if __name__ == "__main__":
     from hypothesis.HypothesisCollection import HypothesisCollection

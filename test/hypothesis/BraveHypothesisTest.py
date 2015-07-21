@@ -16,6 +16,7 @@ class BraveHypothesisTest(unittest.TestCase):
         self._brave = None
 
     def test_update_fitness(self):
+        """Test that the fitness is being updated as expected for brave"""
         self.assertEqual(0.0, self._brave.fitness())
 
         self._brave.update(self.FAKE_VECTOR, self.WAS_ATTACKED, self.SUCCESSFUL_OUTCOME)
@@ -61,5 +62,7 @@ class BraveHypothesisTest(unittest.TestCase):
         self.assertEqual(0.3846, round(self._brave.fitness(), 4))
 
     def test_get_guess(self):
+        """Test that the guesses for brave are always true, meaning
+        attack"""
         for x in range(10):
             self.assertTrue(self._brave.get_guess(self.FAKE_VECTOR))

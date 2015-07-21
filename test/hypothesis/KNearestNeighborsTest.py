@@ -83,5 +83,37 @@ class KNearestNeighborsTest(unittest.TestCase):
             self.assertTrue(self._hypothesis.get_guess([100] * dimension))
             self.assertTrue(self._hypothesis.get_guess([55] * dimension))
 
+    def test_update_rolling_window(self):
+        """Test the KNN algorithm with our built in rolling window"""
+        # First we create a set of beginning data to pass the 99 window
+        # into the first iteration
+        for i in range(50):
+            # the cluster around 10 will be aggressive
+            self._hypothesis.update([10] * 5, 1, -1)
+
+        for i in range(50):
+            # the cluster around 50 will be passive
+            self._hypothesis.update([50] * 5, 1, 1)
+
+        # Asserts to validate its working as expected
+        self.assertFalse(self._hypothesis.get_guess([20] * 5))
+        self.assertTrue(self._hypothesis.get_guess([40] * 5))
+
+        # Next we provide an entirely new set of data
+        # for the next window. Ideally it should shift
+        # to using the data set
+        for i in range(50):
+            # we will simply swap the aggression for each loop
+            self._hypothesis.update([10] * 5, 1, 1)
+
+        for i in range(50):
+            self._hypothesis.update([50] * 5, 1, -1)
+
+        # Finally we assert that the same previous calls
+        # now give the updated data. Therefore showing that
+        # the algorithm is now using the shifted value
+        self.assertTrue(self._hypothesis.get_guess([20] * 5))
+        self.assertFalse(self._hypothesis.get_guess([40] * 5))
+
     def test_fitness(self):
         pass
