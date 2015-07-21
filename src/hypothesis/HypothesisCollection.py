@@ -1,7 +1,6 @@
 from WimpyHypothesis import WimpyHypothesis
 from BraveHypothesis import BraveHypothesis
 from ChunkyWimpyHypothesis import ChunkyWimpyHypothesis
-from KMeansHypothesis import KMeansHypothesis
 from SimpleProbabilityHypothesis import SimpleProbabilityHypothesis
 
 class HypothesisCollection:
