@@ -1,5 +1,6 @@
 """
 """
+import random
 from Hypothesis import Hypothesis
 
 from src.lib.HelperFunctions import dot_product
@@ -28,6 +29,12 @@ class DrPerceptron(Hypothesis):
         self._training_set = []
         self._trainForAtLeastThisManyReps = 299
 
+    def __str__(self):
+        sReturn = "DrPerceptron Hypothesis: "+self._name+"\n"
+        sReturn += "\tInput: "+str(self._inputWindow) +"\n"
+        sReturn += "\tWeights: "+str(self._weights) +"\n"
+        return sReturn
+
     def _train(self):
         ## Undertrain as we are limiting the reps we are trianing for
         for goWeightTraining in range(self._trainForAtLeastThisManyReps):
@@ -47,6 +54,12 @@ class DrPerceptron(Hypothesis):
             if error_count == 0:
                 break
         return True
+
+    def _randoWeights(self):
+        for idx in range (self._weightsSize) :
+            self._weights[idx] = random.uniform(0.1, 0.9)
+            #print('--> idx:'+str(idx)+'##'+str(self._weights[idx]))
+
 
     def _classifier(self, n):
         result = dot_product(self._inputWindow, self._weights)
