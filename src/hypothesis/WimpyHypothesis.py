@@ -26,7 +26,8 @@ class WimpyHypothesis(Hypothesis):
 
     def update(self, vector, attacked, outcome):
         """If we're attacked record it. Know that we would've run away, yo."""
-        """Capped of at self._limiting iterations"""
+
+        #Note: Capped of at self._limiting iterations
 
         if self._limiting >  0:
             if attacked == 1:
@@ -34,4 +35,4 @@ class WimpyHypothesis(Hypothesis):
                     self._losses += 1
                 self._n += 1
 
-        self._limiting -= 1;
+        self._limiting -= 1
