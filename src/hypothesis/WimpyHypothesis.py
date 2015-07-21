@@ -29,7 +29,7 @@ class WimpyHypothesis(Hypothesis):
         """Capped of at self._limiting iterations"""
 
         if self._limiting >  0:
-            if attacked:
+            if attacked == 1:
                 if outcome == -1:
                     self._losses += 1
                 self._n += 1
