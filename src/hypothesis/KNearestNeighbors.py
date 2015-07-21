@@ -35,9 +35,14 @@ class KNearestNeighbors(Hypothesis):
         return self._classifier(vector)
 
     def update(self, vector, attacked, outcome):
+        if outcome == 1:
+            result = True
+        else:
+            result = False
+
         if attacked:
             self._training_data.append(vector)
-            self._training_labels.append(outcome)
+            self._training_labels.append(result)
 
         if len(self._training_data) > self._window:
             self._classifier = self._create_classifier()
