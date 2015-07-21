@@ -9,9 +9,10 @@ from Hypothesis import Hypothesis
 
 class KMeansHypothesis(Hypothesis):
 
-    def __init__(self, dim, k):
+    def __init__(self, dim, k, sub_hypothesis):
         self._centroids = [[randint(1, 100) for d in range(dim)] for x in range(k)]
         self._points = {i : [] for i in range(k)}
+        self._sub_hypothesis = sub_hypothesis
 
     def getName(self):
         return "KMeansHypothesis"
@@ -20,10 +21,14 @@ class KMeansHypothesis(Hypothesis):
         pass
 
     def get_guess(self, vector):
-        pass
+        index = self.index_of_nearest_centroid()
+        self._sub_hypothesis[index].get_guess(vector)
 
     def update(self, vector, attacked, outcome):
-        distance = lambda v: euclidean_distance(v[1], vector)
-        index = min(enumerate(self._centroids), key=distance)[0]
+        index = self.index_of_nearest_centroid
         self._points[index].append(vector)
         self._centroids[index] = [sum(xi) / len(xi) for xi in zip(*self._points[index])]
+
+    def index_of_nearest_centroid(self, vector):
+        dist = lambda v: euclidean_distance(v[1], vector)
+        return min(enumerate(self._centroids), key=dist)[0]
