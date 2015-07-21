@@ -6,3 +6,6 @@ from random import random, randint
 
 def euclidean_distance(initial_vector, to_vector):
     return sqrt(sum([(x2 - x1) ** 2 for x1, x2 in zip(initial_vector, to_vector)]))
+
+def dot_product(values, weights):
+    return sum(value * weight for value, weight in zip(values, weights))
