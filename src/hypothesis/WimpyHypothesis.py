@@ -9,6 +9,7 @@ class WimpyHypothesis(Hypothesis):
     def __init__(self):
         self._losses = 0.0
         self._n = 0.0
+        self._limiting = 100
 
     def getName(self):
         return "WimpyHypothesis"
@@ -25,6 +26,12 @@ class WimpyHypothesis(Hypothesis):
 
     def update(self, vector, attacked, outcome):
         """If we're attacked record it. Know that we would've run away, yo."""
-        if attacked and outcome == -1:
-            self._losses += 1
-            self._n += 1
+        """Capped of at self._limiting iterations"""
+
+        if self._limiting >  0:
+            if attacked:
+                if outcome == -1:
+                    self._losses += 1
+                self._n += 1
+
+        self._limiting -= 1;
