@@ -15,23 +15,28 @@ class DrPerceptron(Hypothesis):
         self._threshold = 0.5
         self._learning_rate = 0.1
 
-        self._weightsSize = 5
-        self._weights = [0] * self._weightsSize
 
-        self._inputWindow =  [0] * self._weightsSize
+        """ Note: _inputList is the list of inputs and the historical
+                  window of inputs on which to train _weights.  Current implementation
+                  is a sliding window in a modded universe defined by self._windowSize
+        """
+        self._windowSize = 5
+        self._inputList =  [0] * self._windowSize
         self._inputIdx = 0
-        self._inputSize = self._weightsSize
+        self._inputSize = self._windowSize
+        self._weightsSize = self._windowSize
+        self._weights = [0] * self._weightsSize
         self._name = self._name + "[numInputs:" + str(self._inputSize) + "]"
 
         self._wins = 0;
         self._n = 1;
 
         self._training_set = []
-        self._trainForAtLeastThisManyReps = 299
+        self._trainForAtLeastThisManyReps = 350
 
     def __str__(self):
         sReturn = "DrPerceptron Hypothesis: "+self._name+"\n"
-        sReturn += "\tInput: "+str(self._inputWindow) +"\n"
+        sReturn += "\tInput: "+str(self._inputList) +"\n"
         sReturn += "\tWeights: "+str(self._weights) +"\n"
         return sReturn
 
@@ -43,11 +48,11 @@ class DrPerceptron(Hypothesis):
             for input_vector, desired_output in self._training_set:
                 # debug print("_train: weights")
                 # debug print(weights)
-                result = dot_product(self._inputWindow, self._weights) > self._threshold
+                result = dot_product(self._inputList, self._weights) > self._threshold
                 error = desired_output - result
                 if error != 0:
                     error_count += 1
-                    for index, value in enumerate(self._inputWindow):
+                    for index, value in enumerate(self._inputList):
                         self._weights[index] += self._learning_rate * error * value
             # debug print("_train: error_count:"+str(error_count))
             # Don't overtrain
@@ -62,7 +67,12 @@ class DrPerceptron(Hypothesis):
 
 
     def _classifier(self, n):
-        result = dot_product(self._inputWindow, self._weights)
+        """
+        Return true or false based on a vector
+        :param n: vector to classify
+        :return:
+        """
+        result = dot_product(self._inputList, self._weights)
         #print ("DBG PERCEPTRON: " + str(self._weights))
         #print ("DBG PERCEPTRON: " + str(result))
         boolresult =  result > self._threshold
@@ -82,30 +92,35 @@ class DrPerceptron(Hypothesis):
     def update(self, vector, attacked, outcome):
         """
         Given a vector update the training matrix
+        Algorithm
+         # 1.) update fitness
+         # 2.) add new data into a modded universe
+         # 3.) add the new chunk
+         # 4.) train
         :param vector: a vector of inputs of 0 - n
         :param attacked: 0 or 1
         :param outcome: -1 or 1
         :return: True
         """
 
-        # update fitness
+        # 1.) update fitness
         boolOutcome = False if outcome==-1 else True
         guess = self.get_guess(vector)
         if guess == boolOutcome:
             self._wins += 1
         self._n += 1
 
-        # add new data into a modded universe
+        # 2.) add new data into a modded universe
         for num in vector:
             # Note: there's a potential to set the following input to += num as a magnitude in a
             #       modded universe
-            self._inputWindow[self._inputIdx] = num
+            self._inputList[self._inputIdx] = num
             self._inputIdx = (self._inputIdx + 1) % self._inputSize
             #print ("DBG PERCEPTRON: INDEX" + str(+self._inputIdx))
 
-        # add the new chunk
-        training_chunk = (self._inputWindow, boolOutcome)
+        # 3.) add the new chunk
+        training_chunk = (self._inputList, boolOutcome)
         self._training_set.append(training_chunk)
 
-        # train
+        # 4.) train
         return self._train()
