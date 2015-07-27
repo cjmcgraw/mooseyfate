@@ -10,6 +10,7 @@ from Hypothesis import Hypothesis
 class KMeansHypothesis(Hypothesis):
 
     def __init__(self, dim, k, sub_hypothesis):
+        super(KMeansHypothesis, self).__init__()
         self.initialize_state(dim, k, sub_hypothesis)
 
     def initialize_state(self, dim, k, sub_hypothesis):
@@ -20,14 +21,12 @@ class KMeansHypothesis(Hypothesis):
     def getName(self):
         return "KMeansHypothesis"
 
-    def fitness(self):
-        pass
-
     def get_guess(self, vector):
         index = self.index_of_nearest_centroid(vector)
         return self._sub_hypothesis[index].get_guess(vector)
 
     def update(self, vector, attacked, outcome):
+        super(KMeansHypothesis, self).update(vector, attacked, outcome)
         index = self.index_of_nearest_centroid(vector)
         self._points[index].append(vector)
         self._centroids[index] = [sum(xi) / len(xi) for xi in zip(*self._points[index])]

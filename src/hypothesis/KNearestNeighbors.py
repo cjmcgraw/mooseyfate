@@ -8,6 +8,7 @@ from src.hypothesis.Hypothesis import Hypothesis
 class KNearestNeighbors(Hypothesis):
 
     def __init__(self, k, window=100):
+        super(KNearestNeighbors, self).__init__()
         self._window = window
 
         self._training_data = []
@@ -26,15 +27,11 @@ class KNearestNeighbors(Hypothesis):
             return max(set(closest_labels), key=closest_labels.count)
         return classify
 
-    def fitness(self):
-        if not self._n:
-            return 0.0
-        return self._successes / self._n
-
     def get_guess(self, vector):
         return self._classifier(vector)
 
     def update(self, vector, attacked, outcome):
+        super(KNearestNeighbors, self).update(vector, attacked, outcome)
         if outcome == 1:
             result = True
         else:

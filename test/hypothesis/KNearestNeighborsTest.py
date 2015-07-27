@@ -13,6 +13,22 @@ class KNearestNeighborsTest(unittest.TestCase):
     def tearDown(self):
         self._hypothesis = None
 
+    def test_fitness(self):
+        """Tests the fitness reflects appropiately for KNN algorithm"""
+        # Set up clusters of two distance groups in three dimensions
+
+        # First we establish that the values around [0, 0, 0] are
+        # always aggressive
+        for i in range(50):
+            self._hypothesis.update([0, 0, 0], 1, -1)
+
+        # Then we establish that the values around [100, 100, 100] are
+        # always passive
+        for i in range(50):
+            self._hypothesis.update([100, 100, 100], 1, 1)
+
+        print(self._hypothesis.fitness())
+
     def test_update_1dimension(self):
         """Test the KNN algorithm in one dimension at multiple points"""
         # Set up cluster of two distant groups in one dimension
@@ -66,8 +82,8 @@ class KNearestNeighborsTest(unittest.TestCase):
         self.assertTrue(self._hypothesis.get_guess([74, 74]))
 
     def test_update_over_Ndimensions(self):
-        """Test the KNN algorithm in between 2 and 100 dimensions"""
-        for dimension in range(2, 100):
+        """Test the KNN algorithm in between 2 and 10 dimensions"""
+        for dimension in range(2, 10):
 
             # first set the aggressive monsters at [10, ..., 10]
             for i in range(50):
