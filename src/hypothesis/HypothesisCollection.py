@@ -12,9 +12,10 @@ class HypothesisCollection:
         #kmeans = KMeansHypothesis(5,5)
         #probability = SimpleProbabilityHypothesis()
         #chunkywimp = ChunkyWimpyHypothesis()
+        #coinflip = RandoHypothesis()
 
-        self.hypoObjArray  = [brave, wimpy] #, kmeans, probability, chunkywimp]
-        self.hypoNameArray = [brave.getName(), wimpy.getName()] #, kmeans.getName(), probability.getName(), chunkywimp.getName()]
+        self.hypoObjArray  = [brave, wimpy] #, kmeans, probability, chunkywimp, coinflip]
+        self.hypoNameArray = [brave.getName(), wimpy.getName()] #, kmeans.getName(), probability.getName(), chunkywimp.getName(), coinflip.getName()]
 
 
     def getHypothesisArray(self):
