@@ -17,7 +17,7 @@ class Hypothesis:
 
         :return: float
         """
-        if self._n < 2:
+        if self._n < 1:
             return 0.0
         return self._success / self._n
 
