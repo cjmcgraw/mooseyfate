@@ -14,22 +14,6 @@ class KNearestNeighborsTest(unittest.TestCase):
     def tearDown(self):
         self._hypothesis = None
 
-    def test_fitness(self):
-        """Tests the fitness reflects appropiately for KNN algorithm"""
-        # Set up clusters of two distance groups in three dimensions
-
-        # First we establish that the values around [0, 0, 0] are
-        # always aggressive
-        for i in range(50):
-            self._hypothesis.update([0, 0, 0], 1, -1)
-
-        # Then we establish that the values around [100, 100, 100] are
-        # always passive
-        for i in range(50):
-            self._hypothesis.update([100, 100, 100], 1, 1)
-
-        print(self._hypothesis.fitness())
-
     def test_update_1dimension(self):
         """Test the KNN algorithm in one dimension at multiple points"""
         # Set up cluster of two distant groups in one dimension
@@ -132,12 +116,6 @@ class KNearestNeighborsTest(unittest.TestCase):
         self.assertTrue(self._hypothesis.get_guess([20] * 5))
         self.assertFalse(self._hypothesis.get_guess([40] * 5))
 
-    def test_fitness_first_window(self):
-        """Test the KNN Algorithm in the first window"""
-        for i in range(99):
-            self._hypothesis.update([randint(1, 100)] * 5, 1, 1)
-            self.assertEquals(0.0, self._hypothesis.fitness())
-
     def test_fitness_second_window_and_third_window(self):
         """Test the KNN Algorithm in the first window moving to the second and
         third"""
@@ -156,7 +134,7 @@ class KNearestNeighborsTest(unittest.TestCase):
         # I will check this by determining the error of the
         # fitness from 0.95
         err = abs(0.95 - self._hypothesis.fitness())
-        self.assertLessEqual(0.05, err)
+        self.assertGreaterEqual(0.05, err)
 
         # Guessing around 25 should yield us "False" for
         # if we should attack
@@ -181,7 +159,7 @@ class KNearestNeighborsTest(unittest.TestCase):
         # though the classification is exactly the opposite
         # of the second window
         err = abs(0.95 - self._hypothesis.fitness())
-        self.assertLessEqual(0.05, err)
+        self.assertGreaterEqual(0.05, err)
 
         # Guessing around 25 should yield us "True" now
         self.assertTrue(self._hypothesis.get_guess([25] * 5))
