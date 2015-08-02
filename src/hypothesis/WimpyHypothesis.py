@@ -17,7 +17,7 @@ class WimpyHypothesis(Hypothesis):
     def fitness(self):
         if not self._n:
             return 0;
-        return 1 - (self._losses / self._n)
+        return (self._losses / self._n)
 
     def get_guess(self, vector):
         """Wimpy never attacks"""
