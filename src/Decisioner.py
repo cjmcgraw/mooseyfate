@@ -45,18 +45,29 @@ class Decisioner:
         5. Update all Hypothesis with the result
     """
 
-    def __init__(self, hypothesis, training_window=101):
+    def __init__(self, hypothesis, training_window=101, trace=False):
         """Initializes the Decisioner """
         self.all_hypothesis = hypothesis
         self._window = training_window
         self._n = 0
+        self._trace = trace
+
+    def println(self, msg):
+        if(self._trace):
+            print(msg)
 
     def get_best_fit_hypothesis(self):
         """Gets the hypothesis that is the best fit
 
         :return: Hypothesis class
         """
-        return max(self.all_hypothesis, key=lambda h: h.fitness())
+        hyp = sorted(self.all_hypothesis, key=lambda h: h.fitness(), reverse=True)
+        self.println("All fitnesses in expected order and by class")
+        for h in hyp:
+            self.println(type(h).__name__ +  ' = ' + str(h.fitness()))
+        self.println('')
+        return hyp[0]
+
 
     def should_attack(self, vector):
         """Retrieves a boolean value representing if the given
@@ -67,10 +78,17 @@ class Decisioner:
 
         :return: bool
         """
+        self.println("Getting guess for vector: " + str(list(vector)))
         if self._n < self._window:
             return True
         best_hypothesis = self.get_best_fit_hypothesis()
-        return best_hypothesis.get_guess(vector)
+        guess = best_hypothesis.get_guess(vector)
+
+        self.println("Best fit hypothesis: " + str(type(best_hypothesis).__name__))
+        self.println("Guess: " + str(guess))
+        self.println('')
+
+        return guess
 
     def learn(self, vector, attacked, outcome):
         """Applies the given monster-vector and outcome
@@ -84,6 +102,10 @@ class Decisioner:
         :param outcome: int representing if the outcome of
         acting on the vector
         """
+        self.println("Learning on vector: " + str(list(vector)))
+        self.println("Was the vector attacked?: " + str(attacked))
+        self.println("What what the outcome of the action?: " + str(outcome))
+        self.println('')
         for hypothesis in self.all_hypothesis:
             hypothesis.update(vector, attacked, outcome)
         self._n += 1
