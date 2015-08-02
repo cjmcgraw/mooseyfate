@@ -7,7 +7,7 @@ from src.hypothesis.Hypothesis import Hypothesis
 
 class KNearestNeighbors(Hypothesis):
 
-    def __init__(self, k, window=50):
+    def __init__(self, k, window=100):
         super(KNearestNeighbors, self).__init__()
         self._window = window
 
