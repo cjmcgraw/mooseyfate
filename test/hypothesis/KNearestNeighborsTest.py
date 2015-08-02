@@ -1,5 +1,6 @@
 """Provides all unit tests for the KNN hypothesis """
 import unittest
+from random import choice, randint
 
 from src.hypothesis.KNearestNeighbors import KNearestNeighbors
 
@@ -131,5 +132,59 @@ class KNearestNeighborsTest(unittest.TestCase):
         self.assertTrue(self._hypothesis.get_guess([20] * 5))
         self.assertFalse(self._hypothesis.get_guess([40] * 5))
 
-    def test_fitness(self):
-        pass
+    def test_fitness_first_window(self):
+        """Test the KNN Algorithm in the first window"""
+        for i in range(99):
+            self._hypothesis.update([randint(1, 100)] * 5, 1, 1)
+            self.assertEquals(0.0, self._hypothesis.fitness())
+
+    def test_fitness_second_window_and_third_window(self):
+        """Test the KNN Algorithm in the first window moving to the second and
+        third"""
+
+        # First we are going to have everything less than 50 be aggressive
+        # and everything greater than 50 passive
+        for x in range(50):
+            vector = [randint(1, 50) for i in range(5)]
+            self._hypothesis.update(vector, 1, -1)
+
+        for x in range(50):
+            vector = [randint(50, 100) for i in range(5)]
+            self._hypothesis.update(vector, 1, 1)
+
+        # Now we expect our fitness to be relatively high
+        # I will check this by determining the error of the
+        # fitness from 0.95
+        err = abs(0.95 - self._hypothesis.fitness())
+        self.assertLessEqual(0.05, err)
+
+        # Guessing around 25 should yield us "False" for
+        # if we should attack
+        self.assertFalse(self._hypothesis.get_guess([25] * 5))
+
+        # Guessing around 75 should yield us "True" for
+        # if we should attack
+        self.assertTrue(self._hypothesis.get_guess([75] * 5))
+
+        # Then we are going to flip the aggression
+        # hopefully the third window will be able to
+        # adjust accordingly
+        for x in range(50):
+            vector = [randint(1, 50) for i in range(5)]
+            self._hypothesis.update(vector, 1, 1)
+
+        for x in range(50):
+            vector = [randint(50, 100) for i in range(5)]
+            self._hypothesis.update(vector, 1, -1)
+
+        # Finally we expect the new fitness to be high even
+        # though the classification is exactly the opposite
+        # of the second window
+        err = abs(0.95 - self._hypothesis.fitness())
+        self.assertLessEqual(0.05, err)
+
+        # Guessing around 25 should yield us "True" now
+        self.assertTrue(self._hypothesis.get_guess([25] * 5))
+
+        # And guessing around 75 should yield us "False"
+        self.assertFalse(self._hypothesis.get_guess([75] * 5))

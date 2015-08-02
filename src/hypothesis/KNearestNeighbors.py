@@ -7,7 +7,7 @@ from src.hypothesis.Hypothesis import Hypothesis
 
 class KNearestNeighbors(Hypothesis):
 
-    def __init__(self, k, window=100):
+    def __init__(self, k, window=50):
         super(KNearestNeighbors, self).__init__()
         self._window = window
 
@@ -16,6 +16,9 @@ class KNearestNeighbors(Hypothesis):
 
         self._k = k
         self._classifier = lambda x: True
+
+        self._next_n = 0.0
+        self._next_success = 0.0
 
     def _create_classifier(self):
         data = self._training_data
@@ -46,4 +49,35 @@ class KNearestNeighbors(Hypothesis):
             self._training_data = []
             self._training_labels = []
 
+            # Then we override the old fitness data
+            # with the new fitness data
+            self._n = self._next_n
+            self._success = self._next_success
 
+            self._next_n = 0.0
+            self._next_success = 0.0
+        else:
+            self.track_fitness_for_next_classification(vector, attacked, outcome)
+    def track_fitness_for_next_classification(self, vector, attacked, outcome):
+        # If we have more then 10 data points then we may
+        # have enough informatino to begin recording the
+        # fitness for the next classify iteration
+        if len(self._training_data) > 20:
+
+            # Create the next classify function
+            next_classify = self._create_classifier()
+            # grab the guess from the function
+            guess = next_classify(vector)
+
+            # Update normally as if it were the classification
+            # that we are currently on, but save the data to
+            # the 'next' classification, that way the fitness
+            # can be updated when we reach the point
+            if attacked != 0:
+                self._next_n += 1
+
+                if guess == attacked and outcome > 0:
+                    self._next_success += 1
+
+                if guess != attacked and outcome < 0:
+                    self._next_success += 1
