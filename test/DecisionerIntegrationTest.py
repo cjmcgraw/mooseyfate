@@ -86,7 +86,7 @@ class DecisionerIntegrationTest(unittest.TestCase):
     def test_GroupedAggroByColor_WithWimpyBraveAndKNN(self):
         brave = BraveHypothesis()
         wimpy = WimpyHypothesis()
-        knn = KNearestNeighbors(3, 299)
+        knn = KNearestNeighbors(3)
 
         self.setUpDecisioner(brave, wimpy, knn)
 
@@ -101,3 +101,45 @@ class DecisionerIntegrationTest(unittest.TestCase):
             else:
                 return Monster(0, [color], 'passive')
 
+        # Next we load up the training data
+        for i in range(100):
+            # Create the monster and generate all the data, by default
+            # we expect everything in the training period to be true
+            # meaning attack for data
+            monster = create_monster()
+            self.assertTrue(self.decisioner.should_attack(monster.color))
+            self.decisioner.learn(monster.color, 1, monster.action(True))
+
+        # Finally we need to know that normal KNN was matched as the best
+        # fitness for the data set
+        self.assertGreater(knn.fitness(), brave.fitness())
+        self.assertGreater(knn.fitness(), wimpy.fitness())
+
+        # Then we are going to run over all of the data sets
+        # We want to also track the actual value and the maximum
+        # value for comparison
+        maximum_value = 5000.0
+        actual_value = 0.0
+
+        for i in range(5000):
+            # Create the monster, guess on it and grab the outcome
+            # which is all required information for the loop
+            monster = create_monster()
+            guess = self.decisioner.should_attack(monster.color)
+            outcome = monster.action(guess)
+
+            # update values for comparison after loop
+            maximum_value -= monster._aggressive
+            actual_value += outcome
+
+            # 
+            self.decisioner.learn(monster.color, guess, outcome)
+
+            # We need to know that KNN is still our best fit for this
+            # data set
+            self.assertGreater(knn.fitness(), brave.fitness())
+            self.assertGreater(knn.fitness(), wimpy.fitness())
+
+        # Finally we expect that the standard KNN process will obtain
+        # within 10 percent margin of the best possible solution
+        self.assertGreater(actual_value / maximum_value, 0.9)
