@@ -27,6 +27,10 @@ class KMeansHypothesis(Hypothesis):
 
     def update(self, vector, attacked, outcome):
         super(KMeansHypothesis, self).update(vector, attacked, outcome)
+        
+        for hyp in self._sub_hypothesis:
+            hyp.update(vector, attacked, outcome)
+
         index = self.index_of_nearest_centroid(vector)
         self._points[index].append(vector)
         self._centroids[index] = [sum(xi) / len(xi) for xi in zip(*self._points[index])]
