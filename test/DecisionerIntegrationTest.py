@@ -149,6 +149,7 @@ class DecisionerIntegrationTest(unittest.TestCase):
         brave = BraveHypothesis()
         wimpy = WimpyHypothesis()
         knn = KNearestNeighbors(3)
+
         kmeans = KMeansHypothesis(1, 2, [SimpleProbabilityHypothesis() for x in range(2)])
 
         self.setUpDecisioner(brave, wimpy, knn, kmeans)
