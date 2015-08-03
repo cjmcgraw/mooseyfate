@@ -3,35 +3,6 @@ method for running the decision framework
 """
 from src.hypothesis.Hypothesis import Hypothesis
 
-def get_monsters():
-    """Retrieves an iterator of monsters
-
-    :return: Iterator
-    :yield: 2-tuple representing the vector
-    data of the associated monster
-    """
-    get_next_monster = lambda: None # Get the monster
-
-    monster = get_next_monster()
-    while monster:
-        yield monster
-        monster = get_next_monster()
-
-def act_on_monster(monster, should_attack):
-    """On the given monster, perform an attack if
-    the second variable is true
-
-    :param monster: Representing the monster
-    :param should_attack: Representing if an attack
-    should be made against the monster
-
-    :return: int representing the outcome of the operation
-    on the monster. Representing -1, 0, or 1 for the loss,
-    neutral and gain outcomes
-    """
-    outcome = None # perform action should attack on last monster
-    return outcome
-
 class Decisioner(Hypothesis):
     """Decisioner class retrieves monsters, finds the best hypothesis
     to use, executes the guess from the hypothesis and then updates all
@@ -50,7 +21,6 @@ class Decisioner(Hypothesis):
         """Initializes the Decisioner """
         self.all_hypothesis = hypothesis
         self._window = training_window
-        self._n = 0
         self._trace = trace
 
     def println(self, msg):
@@ -83,7 +53,7 @@ class Decisioner(Hypothesis):
         :return: bool
         """
         self.println("Getting guess for vector: " + str(list(vector)))
-        if self._n < self._window:
+        if self._window > 0:
             return True
         best_hypothesis = self.get_best_fit_hypothesis()
         guess = best_hypothesis.get_guess(vector)
@@ -112,4 +82,5 @@ class Decisioner(Hypothesis):
         self.println('')
         for hypothesis in self.all_hypothesis:
             hypothesis.update(vector, attacked, outcome)
-        self._n += 1
+        self._window -= 1
+
