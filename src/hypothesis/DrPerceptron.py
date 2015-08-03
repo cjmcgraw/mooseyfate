@@ -9,8 +9,6 @@ class DrPerceptron(Hypothesis):
 
     def __init__(self, windowSize=100):
         self._name = "DrPerceptron"
-        self._window = windowSize
-        self._windowN = 0
 
         self._threshold = 0.5
         self._learning_rate = 0.1
@@ -87,7 +85,7 @@ class DrPerceptron(Hypothesis):
         return self._classifier(vector)
 
     def fitness(self):
-        return (self._wins / self._n)
+        return (float(self._wins) / float(self._n))
 
     def update(self, vector, attacked, outcome):
         """
@@ -103,9 +101,17 @@ class DrPerceptron(Hypothesis):
         :return: True
         """
 
+        print ("DrPerceptron Debug:  Vector:"+str(vector));
+        print ("DrPerceptron Debug:Attacked:"+str(attacked));
+        print ("DrPerceptron Debug: Outcome:"+str(outcome));
+
+        
+
         # 1.) update fitness
-        boolOutcome = False if outcome==-1 else True
+        # Translate the outcome into boolean 
+        boolOutcome = False if outcome==-1 else True 
         guess = self.get_guess(vector)
+        # Increment wins if it's working
         if guess == boolOutcome:
             self._wins += 1
         self._n += 1
@@ -121,6 +127,12 @@ class DrPerceptron(Hypothesis):
         # 3.) add the new chunk
         training_chunk = (self._inputList, boolOutcome)
         self._training_set.append(training_chunk)
+
+
+        # DEBUG 
+        print ("DrPerceptron Debug: wins:"+str(self._wins));
+        print ("DrPerceptron Debug:    n:"+str(self._n));
+        print ("DrPerceptron Debug: fitness:"+str(self.fitness()));
 
         # 4.) train
         return self._train()

@@ -6,6 +6,7 @@ import unittest
 from random import randint, choice, random
 
 from src.Decisioner import Decisioner
+from src.hypothesis.DrPerceptron import DrPerceptron
 from src.hypothesis.BraveHypothesis import BraveHypothesis
 from src.hypothesis.WimpyHypothesis import WimpyHypothesis
 from src.hypothesis.KNearestNeighbors import KNearestNeighbors
@@ -84,6 +85,79 @@ class DecisionerIntegrationTest(unittest.TestCase):
             # a greater fitness than the brave for each iteration
             self.assertGreater(brave.fitness(), wimpy.fitness())
 
+    def test_simpleResponse_WithDrPerceptron(self):
+        brave = BraveHypothesis()
+        wimpy = WimpyHypothesis()
+        drP = DrPerceptron()
+        self.setUpDecisioner(brave, wimpy, drP)
+
+        # First we will start with the basic training case
+        # which is the first 100 in the range
+        for i in range(101):
+            nonAggro = 0 # this means not aggro
+            color = [randint(1, 100)]
+            monster = Monster(nonAggro, color, 'passive')
+
+            # Get the guess from the decisioner for the first 100,
+            # we expect every guess to be 1
+            self.assertTrue(self.decisioner.get_guess(monster.color))
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, 1, monster.action(True))
+
+        # DrPerceptron should converge pretty quickly and be better than wimpy but not as good as brave
+        for i in range(100):
+            aggro = 1 # this means aggro
+            color = [randint(1, 100)]
+            monster = Monster(aggro, color, 'aggressive')
+
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, 1, 1)
+
+            self.assertGreater(drP.fitness(), wimpy.fitness())
+            self.assertGreater(brave.fitness(), drP.fitness())        
+    def test_frequencyResponse_WithDrPerceptron(self):
+        brave = BraveHypothesis()
+        wimpy = WimpyHypothesis()
+        drP = DrPerceptron()
+        self.setUpDecisioner(brave, wimpy, drP)
+
+        # First we will start with the basic training case
+        # which is the first 100 in the range
+        for i in range(101):
+            nonAggro = 0 # this means not aggro
+            color = [randint(1, 100)]
+            monster = Monster(nonAggro, color, 'passive')
+
+            # Get the guess from the decisioner for the first 100,
+            # we expect every guess to be 1
+            self.assertTrue(self.decisioner.get_guess(monster.color))
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, 1, monster.action(True))
+
+        # Dr. Perceptron should do better than brave and wimpy
+        # when encountering monsters that repeat with a frequency
+        # that is trainable given Dr.Perceptron's window size.
+        # In otherwords, Dr. Perceptron trains on a frequency of
+        # Monsters but training on a pattern is limited to the
+        # input size of Dr. Perceptron (which as of this check-in
+        # is 5)
+        #
+        # We test a staggered input
+        for i in range(10):
+            aggro = 1 # this means aggro
+            passive = 0 # this means aggro
+            evenMonstersPassive = i%2
+            color = [randint(1, 100)]
+            monster = Monster(evenMonstersPassive, color, 'aggressive')
+
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, evenMonstersPassive, evenMonstersPassive)
+            # drP should always be better than brave
+            self.assertGreater(drP.fitness(), wimpy.fitness())
+
+        # after 2 sets of 5 inputs drP should be better than brave
+        self.assertGreater(drP.fitness(), brave.fitness())
+        
     def test_GroupedAggroByColor_WithWimpyBraveAndKNN(self):
         brave = BraveHypothesis()
         wimpy = WimpyHypothesis()
