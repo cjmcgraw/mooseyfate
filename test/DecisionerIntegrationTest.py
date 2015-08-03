@@ -148,11 +148,11 @@ class DecisionerIntegrationTest(unittest.TestCase):
             passive = 0 # this means aggro
             evenMonstersPassive = i%2
             color = [randint(1, 100)]
-            monster = Monster(evenMonstersPassive, color, 'aggressive')
+            monster = Monster(evenMonstersPassive, color, 'aggressiveish')
 
             # Then we will update from this guess
             self.decisioner.update(monster.color, evenMonstersPassive, evenMonstersPassive)
-            # drP should always be better than brave
+            # drP should always be better than wimpy
             self.assertGreater(drP.fitness(), wimpy.fitness())
 
         # after 2 sets of 5 inputs drP should be better than brave
