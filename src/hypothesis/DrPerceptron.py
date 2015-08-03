@@ -101,11 +101,9 @@ class DrPerceptron(Hypothesis):
         :return: True
         """
 
-        print ("DrPerceptron Debug:  Vector:"+str(vector));
-        print ("DrPerceptron Debug:Attacked:"+str(attacked));
-        print ("DrPerceptron Debug: Outcome:"+str(outcome));
-
-        
+        #print ("DrPerceptron Debug:  Vector:"+str(vector));
+        #print ("DrPerceptron Debug:Attacked:"+str(attacked));
+        #print ("DrPerceptron Debug: Outcome:"+str(outcome));
 
         # 1.) update fitness
         # Translate the outcome into boolean 
@@ -130,9 +128,9 @@ class DrPerceptron(Hypothesis):
 
 
         # DEBUG 
-        print ("DrPerceptron Debug: wins:"+str(self._wins));
-        print ("DrPerceptron Debug:    n:"+str(self._n));
-        print ("DrPerceptron Debug: fitness:"+str(self.fitness()));
+        #print ("DrPerceptron Debug: wins:"+str(self._wins));
+        #print ("DrPerceptron Debug:    n:"+str(self._n));
+        #print ("DrPerceptron Debug: fitness:"+str(self.fitness()));
 
         # 4.) train
         return self._train()
