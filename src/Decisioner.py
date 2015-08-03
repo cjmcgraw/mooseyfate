@@ -1,6 +1,7 @@
 """Decisioner module defines the Decisioner class and the main
 method for running the decision framework
 """
+from src.hypothesis.Hypothesis import Hypothesis
 
 def get_monsters():
     """Retrieves an iterator of monsters
@@ -31,7 +32,7 @@ def act_on_monster(monster, should_attack):
     outcome = None # perform action should attack on last monster
     return outcome
 
-class Decisioner:
+class Decisioner(Hypothesis):
     """Decisioner class retrieves monsters, finds the best hypothesis
     to use, executes the guess from the hypothesis and then updates all
     the hypothesis.
@@ -56,6 +57,9 @@ class Decisioner:
         if(self._trace):
             print(msg)
 
+    def fitness(self):
+        return self.get_best_fit_hypothesis.fitness()
+
     def get_best_fit_hypothesis(self):
         """Gets the hypothesis that is the best fit
 
@@ -69,7 +73,7 @@ class Decisioner:
         return hyp[0]
 
 
-    def should_attack(self, vector):
+    def get_guess(self, vector):
         """Retrieves a boolean value representing if the given
         monster should be attacked
 
@@ -90,7 +94,7 @@ class Decisioner:
 
         return guess
 
-    def learn(self, vector, attacked, outcome):
+    def update(self, vector, attacked, outcome):
         """Applies the given monster-vector and outcome
         to the hypothesis
 
@@ -109,36 +113,3 @@ class Decisioner:
         for hypothesis in self.all_hypothesis:
             hypothesis.update(vector, attacked, outcome)
         self._n += 1
-
-if __name__ == "__main__":
-    from hypothesis.HypothesisCollection import HypothesisCollection
-    """from hypothesis.WimpyHypothesis import WimpyHypothesis"""
-    """from hypothesis.BraveHypothesis import BraveHypothesis"""
-
-    from lib.TestingEnvironment import monster_generator
-
-    """brave = BraveHypothesis()"""
-    """wimpy = WimpyHypothesis()"""
-    hypoCollection = HypothesisCollection()
-    hypoArray = hypoCollection.getHypothesisArray()
-    print("-------- Hypothesis Names --------")
-    for hypo in hypoArray:
-        print(hypo.getName())
-    print("-------- ================ --------")
-
-
-    decisioner = Decisioner(hypoArray)
-
-    genny = monster_generator()
-    monsters = [next(genny) for x in range(100)]
-
-    for monster in monsters:
-        should_attack = decisioner.should_attack(monster)
-        outcome = act_on_monster(monster, should_attack)
-        decisioner.learn(monster, should_attack, outcome)
-
-    print(vars(decisioner))
-    print('')
-    print('Brave hypothesis: ' + str(vars(decisioner.all_hypothesis[0])))
-    print('')
-    print('Wimpy hypothesis: ' + str(vars(decisioner.all_hypothesis[1])))
