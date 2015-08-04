@@ -93,7 +93,7 @@ class OptimusPerceptron(Hypothesis):
         return self._classifier(vector)
 
     def fitness(self):
-        return (self._wins / self._n)
+        return (float(self._wins) / float(self._n))
 
     def update(self, vector, attacked, outcome):
         """
@@ -128,9 +128,10 @@ class OptimusPerceptron(Hypothesis):
         training_chunk = (self._inputList, boolOutcome)
         self._training_set.append(training_chunk)
 
-        if len(self._training_set) > self._max_training_set_size:
+        if len(self._training_set) > self._max_training_set_size+self._windowSize:
             #forget some of the earlier training data
-            self._training_set.pop(0)
+            for deleteWindow in range(self._windowSize):
+                self._training_set.pop(0)
 
         # 4.) train
         return self._train()

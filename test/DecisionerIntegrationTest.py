@@ -7,6 +7,7 @@ from random import randint, choice, random
 
 from src.Decisioner import Decisioner
 from src.hypothesis.DrPerceptron import DrPerceptron
+from src.hypothesis.OptimusPerceptron import OptimusPerceptron
 from src.hypothesis.RandoHypothesis import RandoHypothesis
 from src.hypothesis.BraveHypothesis import BraveHypothesis
 from src.hypothesis.WimpyHypothesis import WimpyHypothesis
@@ -192,6 +193,48 @@ class DecisionerIntegrationTest(unittest.TestCase):
         # after 2 sets of 5 inputs drP should be better than brave
         self.assertGreater(drP.fitness(), brave.fitness())
 
+    def test_frequencyResponse_WithOptimusPerceptron(self):
+        brave = BraveHypothesis()
+        wimpy = WimpyHypothesis()
+        oPP = OptimusPerceptron(4)
+        self.setUpDecisioner(brave, wimpy, oPP)
+
+        # First we will start with the basic training case
+        # which is the first 100 in the range
+        for i in range(101):
+            nonAggro = 0 # this means not aggro
+            color = [randint(1, 100)]
+            monster = Monster(nonAggro, color, 'passive')
+
+            # Get the guess from the decisioner for the first 100,
+            # we expect every guess to be 1
+            self.assertTrue(self.decisioner.get_guess(monster.color))
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, 1, monster.action(True))
+
+        # Dr. Perceptron should do better than brave and wimpy
+        # when encountering monsters that repeat with a frequency
+        # that is trainable given Dr.Perceptron's window size.
+        # In otherwords, Dr. Perceptron trains on a frequency of
+        # Monsters but training on a pattern is limited to the
+        # input size of Dr. Perceptron (which as of this check-in
+        # is 5)
+        #
+        # We test a staggered input
+        for i in range(100):
+            aggro = 1
+            passive = 0
+            evenMonstersPassive = i%2
+            color = [randint(1, 100)]
+            monster = Monster(evenMonstersPassive, color, 'aggressiveish')
+
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, evenMonstersPassive, evenMonstersPassive)
+            #print ('i:'+str(i)+' '+str(evenMonstersPassive)+' '+str(oPP.fitness()))
+
+        self.assertGreater(oPP.fitness(), wimpy.fitness())
+        self.assertGreater(oPP.fitness(), brave.fitness())
+
     def test_frequencyResponse_forHarmonic_WithDrPerceptron(self):
         brave = BraveHypothesis()
         wimpy = WimpyHypothesis()
@@ -236,6 +279,51 @@ class DecisionerIntegrationTest(unittest.TestCase):
         # Since the pattern is highly regular within the input size, the fitness should be really really close to 1.
         # With great harmony results great trainability and therefore great fitness
         self.assertGreater(drP.fitness(), 0.99)
+
+    def test_frequencyResponse_forHarmonic_WithOptimusPerceptron(self):
+        brave = BraveHypothesis()
+        wimpy = WimpyHypothesis()
+        oPP = OptimusPerceptron()
+        self.setUpDecisioner(brave, wimpy, oPP)
+
+        # First we will start with the basic training case
+        # which is the first 100 in the range
+        for i in range(101):
+            nonAggro = 0 # this means not aggro
+            color = [randint(1, 100)]
+            monster = Monster(nonAggro, color, 'passive')
+
+            # Get the guess from the decisioner for the first 100,
+            # we expect every guess to be 1
+            self.assertTrue(self.decisioner.get_guess(monster.color))
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, 1, monster.action(True))
+
+        # Dr. Perceptron should do better than brave and wimpy
+        # when encountering monsters that repeat with a frequency
+        # that is trainable given Dr.Perceptron's window size.
+        # In otherwords, Dr. Perceptron trains on a frequency of
+        # Monsters but training on a pattern is limited to the
+        # input size of Dr. Perceptron (which as of this check-in
+        # is 5)
+        #
+        # We test a staggered input with a repeating pattern
+        for i in range(1000):
+            aggroPattern = [0, 1, 1, 0, 1]
+            aggroIdx = i%len(aggroPattern)
+            color = [randint(1, 100)]
+            monster = Monster(aggroPattern[aggroIdx], color, 'aggressiveish')
+
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, aggroPattern[aggroIdx], aggroPattern[aggroIdx])
+            # drP should always be better than wimpy
+            self.assertGreater(oPP.fitness(), wimpy.fitness())
+
+        # after a lot of training for a pattern that is harmonic within the input size Dr.P should beat out brave
+        self.assertGreater(oPP.fitness(), brave.fitness())
+        # Since the pattern is highly regular within the input size, the fitness should be really really close to 1.
+        # With great harmony results great trainability and therefore great fitness
+        self.assertGreater(oPP.fitness(), 0.99)
 
     def test_GroupedAggroByColor_WithWimpyBraveAndKNN(self):
         brave = BraveHypothesis()
