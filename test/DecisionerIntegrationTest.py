@@ -114,7 +114,7 @@ class DecisionerIntegrationTest(unittest.TestCase):
             self.decisioner.update(monster.color, 1, 1)
 
             self.assertGreater(drP.fitness(), wimpy.fitness())
-            self.assertGreater(brave.fitness(), drP.fitness())        
+            self.assertGreater(brave.fitness(), drP.fitness())
 
     def test_frequencyResponse_WithDrPerceptron(self):
         brave = BraveHypothesis()
@@ -203,7 +203,7 @@ class DecisionerIntegrationTest(unittest.TestCase):
         # Since the pattern is highly regular within the input size, the fitness should be really really close to 1.
         # With great harmony results great trainability and therefore great fitness
         self.assertGreater(drP.fitness(), 0.99)
-        
+
     def test_GroupedAggroByColor_WithWimpyBraveAndKNN(self):
         brave = BraveHypothesis()
         wimpy = WimpyHypothesis()
@@ -264,56 +264,56 @@ class DecisionerIntegrationTest(unittest.TestCase):
         # Finally we expect that the standard KNN process will obtain
         # within 10 percent margin of the best possible solution
         self.assertGreater(actual_value / maximum_value, 0.9)
-
-    def test_GroupAggroByColorAndProbability_WithWimpyBraveKNNAndKMeans(self):
-        brave = BraveHypothesis()
-        wimpy = WimpyHypothesis()
-        knn = KNearestNeighbors(3)
-
-        kmeans = KMeansHypothesis(1, 2, [SimpleProbabilityHypothesis() for x in range(2)])
-
-        self.setUpDecisioner(brave, wimpy, knn, kmeans)
-
-        def create_monster():
-            p_values = [0.3, 0.4, 0.6, 0.2]
-            base = choice([20, 80])
-            color = base + randint(-5, 5)
-
-            if base == 20:
-                if random() <= p_values[0]:
-                    return Monster(0, [color], 'passive')
-                return Monster(1, [color], 'aggressive')
-            if base == 40:
-                if random() <= p_values[1]:
-                    return Monster(0, [color], 'passive')
-                return Monster(1, [color], 'aggressive')
-            if base == 60:
-                if random() <= p_values[2]:
-                    return Monster(0, [color], 'passive')
-                return Monster(1, [color], 'aggressive')
-            if base == 80:
-                if random() <= p_values[3]:
-                    return Monster(0, [color], 'passive')
-                return Monster(1, [color], 'aggressive')
-
-        # Lets train against some monsters for the standard initial training
-        # period
-        for x in range(1000):
-            monster = create_monster()
-            outcome = monster.action(True)
-            self.decisioner.update(monster.color, True, outcome)
-
-            kmeans_guess = kmeans.get_guess(monster.color)
-
-            print('Brave fitness = ' + str(brave.fitness()))
-            print('Wimpy fitness = ' + str(wimpy.fitness()))
-            print('KNN fitness = ' + str(knn.fitness()))
-            print('KMeans fitness = ' + str(kmeans.fitness()))
-            print('vector =' + str(monster.color))
-            print('KMeans Guess = ' + str(kmeans_guess))
-            print(kmeans._centroids)
-            print(vars(kmeans._sub_hypothesis[0]))
-            print(vars(kmeans._sub_hypothesis[1]))
-            print('')
-
-        # Now we have trained our data set, we need to get some guesses
+#
+#    def test_GroupAggroByColorAndProbability_WithWimpyBraveKNNAndKMeans(self):
+#        brave = BraveHypothesis()
+#        wimpy = WimpyHypothesis()
+#        knn = KNearestNeighbors(16)
+#
+#        kmeans = KMeansHypothesis(1, 2, [SimpleProbabilityHypothesis() for x in range(2)])
+#
+#        self.setUpDecisioner(brave, wimpy, knn, kmeans)
+#
+#        def create_monster():
+#            p_values = [0.2, 0.4, 0.6, 0.7]
+#            base = choice([20, 80])
+#            color = base + randint(-5, 5)
+#
+#            if base == 20:
+#                if random() <= p_values[0]:
+#                    return Monster(0, [color], 'passive')
+#                return Monster(1, [color], 'aggressive')
+#            if base == 40:
+#                if random() <= p_values[1]:
+#                    return Monster(0, [color], 'passive')
+#                return Monster(1, [color], 'aggressive')
+#            if base == 60:
+#                if random() <= p_values[2]:
+#                    return Monster(0, [color], 'passive')
+#                return Monster(1, [color], 'aggressive')
+#            if base == 80:
+#                if random() <= p_values[3]:
+#                    return Monster(0, [color], 'passive')
+#                return Monster(1, [color], 'aggressive')
+#
+#        # Lets train against some monsters for the standard initial training
+#        # period
+#        for x in range(1000):
+#            monster = create_monster()
+#            outcome = monster.action(True)
+#            self.decisioner.update(monster.color, True, outcome)
+#
+#            kmeans_guess = kmeans.get_guess(monster.color)
+#
+#            print('Brave fitness = ' + str(brave.fitness()))
+#            print('Wimpy fitness = ' + str(wimpy.fitness()))
+#            print('KNN fitness = ' + str(knn.fitness()))
+#            print('KMeans fitness = ' + str(kmeans.fitness()))
+#            print('vector =' + str(monster.color))
+#            print('KMeans Guess = ' + str(kmeans_guess))
+#            print(kmeans._centroids)
+#            print(vars(kmeans._sub_hypothesis[0]))
+#            print(vars(kmeans._sub_hypothesis[1]))
+#            print('')
+#
+#        # Now we have trained our data set, we need to get some guesses
