@@ -7,6 +7,7 @@ from random import randint, choice, random
 
 from src.Decisioner import Decisioner
 from src.hypothesis.DrPerceptron import DrPerceptron
+from src.hypothesis.RandoHypothesis import RandoHypothesis
 from src.hypothesis.BraveHypothesis import BraveHypothesis
 from src.hypothesis.WimpyHypothesis import WimpyHypothesis
 from src.hypothesis.KNearestNeighbors import KNearestNeighbors
@@ -84,6 +85,38 @@ class DecisionerIntegrationTest(unittest.TestCase):
             # Finally we know that the wimpy hypothesis should always have
             # a greater fitness than the brave for each iteration
             self.assertGreater(brave.fitness(), wimpy.fitness())
+
+    def test_AllPassiveMonsters_WithRando(self):
+        wimpy = WimpyHypothesis()
+        rando = RandoHypothesis()
+        self.setUpDecisioner(wimpy, rando)
+
+        # First we will start with the basic training case
+        # which is the first 100 in the range
+        for i in range(101):
+            monster = Monster(0, [randint(1, 100)], 'passive')
+
+            # Get the guess from the decisioner for the first 100,
+            # we expect every guess to be 1
+            self.assertTrue(self.decisioner.get_guess(monster.color))
+
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, 1, monster.action(True))
+
+        for i in range(5000):
+            monster = Monster(0, [randint(1, 100)], 'aggressive')
+
+            self.decisioner.get_guess(monster.color)
+
+            # Then we will update from this guess
+            self.decisioner.update(monster.color, 1, 1)
+
+            # Flipping a coin is better than doing nothing
+            self.assertGreater(rando.fitness(), wimpy.fitness())
+
+        # Randomness should be near-even in distribution
+        self.assertGreater(rando.fitness(), 0.4)
+        self.assertGreater(0.6, rando.fitness())
 
     def test_simpleResponse_WithDrPerceptron(self):
         brave = BraveHypothesis()

@@ -7,7 +7,7 @@ from src.lib.HelperFunctions import dot_product
 
 class DrPerceptron(Hypothesis):
 
-    def __init__(self, windowSize=100):
+    def __init__(self, inputBuffer=5):
         self._name = "DrPerceptron"
 
         self._threshold = 0.5
@@ -18,7 +18,7 @@ class DrPerceptron(Hypothesis):
                   window of inputs on which to train _weights.  Current implementation
                   is a sliding window in a modded universe defined by self._windowSize
         """
-        self._windowSize = 5
+        self._windowSize = inputBuffer
         self._inputList =  [0] * self._windowSize
         self._inputIdx = 0
         self._inputSize = self._windowSize
