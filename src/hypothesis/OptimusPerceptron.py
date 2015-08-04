@@ -5,22 +5,18 @@ from Hypothesis import Hypothesis
 
 from src.lib.HelperFunctions import dot_product
 
-class DrPerceptron(Hypothesis):
+class OptimusPerceptron(Hypothesis):
 
-    def __init__(self, inputBufferSize=5):
-        self._name = "DrPerceptron"
+    def __init__(self, windowSize=100):
+        self._name = "OptimusPerceptron"
+        self._window = windowSize
+        self._windowN = 0
 
-        self._threshold = 0.5
-        self._learning_rate = 0.1
-
-
-        """ Note: _windowSize is the list of perceptron inputs or rather the historical
+        """ Note: _inputList is the list of inputs and the historical
                   window of inputs on which to train _weights.  Current implementation
-                  is a sliding window in a modded universe defined by self._windowSize.
-                  This allows for the perceptron to train and respond to events in the
-                  frequency domain.
+                  is a sliding window in a modded universe defined by self._windowSize
         """
-        self._windowSize = inputBufferSize
+        self._windowSize = 5
         self._inputList =  [0] * self._windowSize
         self._inputIdx = 0
         self._inputSize = self._windowSize
@@ -31,11 +27,21 @@ class DrPerceptron(Hypothesis):
         self._wins = 0;
         self._n = 1;
 
+        # threshold for truthyness
+        self._threshold = 0.5
+
+        # rate at which things can learn
+        self._learning_rate = 0.1
+
+        # save all interactions and add them to training
         self._training_set = []
-        self._trainForAtLeastThisManyReps = 350
+        # don't remember everything, just the last 300 inputs
+        self._max_training_set_size = 300
+        # our learning rate is small, here's the max amount of reps to train the neuron
+        self._trainForAtLeastThisManyReps = 400
 
     def __str__(self):
-        sReturn = "DrPerceptron Hypothesis: "+self._name+"\n"
+        sReturn = "OptimusPerceptron Hypothesis: "+self._name+"\n"
         sReturn += "\tInput: "+str(self._inputList) +"\n"
         sReturn += "\tWeights: "+str(self._weights) +"\n"
         return sReturn
@@ -44,7 +50,7 @@ class DrPerceptron(Hypothesis):
         ## Undertrain as we are limiting the reps we are trianing for
         for goWeightTraining in range(self._trainForAtLeastThisManyReps):
             error_count = 0
-            #print ("DBG PERCEPTRON: _trainingset:" + str(self._training_set))
+            #print ("DBG OptimusPERCEPTRON: _trainingset:" + str(self._training_set))
             for input_vector, desired_output in self._training_set:
                 # debug print("_train: weights")
                 # debug print(weights)
@@ -87,7 +93,7 @@ class DrPerceptron(Hypothesis):
         return self._classifier(vector)
 
     def fitness(self):
-        return (float(self._wins) / float(self._n))
+        return (self._wins / self._n)
 
     def update(self, vector, attacked, outcome):
         """
@@ -103,15 +109,9 @@ class DrPerceptron(Hypothesis):
         :return: True
         """
 
-        #print ("DrPerceptron Debug:  Vector:"+str(vector));
-        #print ("DrPerceptron Debug:Attacked:"+str(attacked));
-        #print ("DrPerceptron Debug: Outcome:"+str(outcome));
-
         # 1.) update fitness
-        # Translate the outcome into boolean 
-        boolOutcome = False if outcome==-1 else True 
+        boolOutcome = False if outcome==-1 else True
         guess = self.get_guess(vector)
-        # Increment wins if it's working
         if guess == boolOutcome:
             self._wins += 1
         self._n += 1
@@ -128,11 +128,9 @@ class DrPerceptron(Hypothesis):
         training_chunk = (self._inputList, boolOutcome)
         self._training_set.append(training_chunk)
 
-
-        # DEBUG 
-        #print ("DrPerceptron Debug: wins:"+str(self._wins));
-        #print ("DrPerceptron Debug:    n:"+str(self._n));
-        #print ("DrPerceptron Debug: fitness:"+str(self.fitness()));
+        if len(self._training_set) > self._max_training_set_size:
+            #forget some of the earlier training data
+            self._training_set.pop(0)
 
         # 4.) train
         return self._train()
