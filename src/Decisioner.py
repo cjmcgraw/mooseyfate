@@ -203,3 +203,5 @@ if __name__ == "__main__":
     print('maximum outcome value: ' + str(maximum_outcome) + ' (' + str(maximum_outcome / n) + ')')
     print('actual outcome value:  ' + str(actual_outcome) + ' (' + str(actual_outcome / n) + ')')
     print('outcome ratio:         ' + str(actual_outcome / maximum_outcome))
+    print('')
+    print('SCORE: ' + str(actual_outcome))
