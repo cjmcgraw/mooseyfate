@@ -10,6 +10,9 @@ class MockHypothesis(Hypothesis):
         self._fitness = fitness
         self._times_updated = 0
 
+    def name(self):
+        return 'MockHypothesis'
+
     def fitness(self):
         return self._fitness
 

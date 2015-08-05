@@ -119,13 +119,29 @@ if __name__ == "__main__":
             KNearestNeighbors(7),
             KNearestNeighbors(11),
             KNearestNeighbors(17),
+            KNearestNeighbors(23),
+            KNearestNeighbors(29),
             KNearestNeighbors(31),
+            KNearestNeighbors(37),
+            KNearestNeighbors(41),
+            KNearestNeighbors(43),
+            KNearestNeighbors(47),
             SimpleProbabilityHypothesis(),
             RandoHypothesis(),
-            OptimusPerceptron(5),  # mod 3 universe
+            OptimusPerceptron(47),  # mod 47 universe
+            OptimusPerceptron(43),  # mod 43 universe
+            OptimusPerceptron(41),  # mod 41 universe
+            OptimusPerceptron(37),  # mod 37 universe
+            OptimusPerceptron(31),  # mod 31 universe
+            OptimusPerceptron(29),  # mod 29 universe
+            OptimusPerceptron(23),  # mod 23 universe
+            OptimusPerceptron(17),  # mod 17 universe
+            OptimusPerceptron(11),  # mod 11 universe
+            OptimusPerceptron(7),  # mod 7 universe
+            OptimusPerceptron(5),  # mod 5 universe
             OptimusPerceptron(3),  # mod 3 universe
-            #OptimusPerceptron(2), # even universe
-            #OptimusPerceptron(1), # lonliest number universe, interesting but not a good idea
+            OptimusPerceptron(2), # even universe
+            OptimusPerceptron(1), # lonliest number universe, interesting but not a good idea
             ]
 
     training_window = 100

@@ -30,6 +30,9 @@ class ChunkyKNNHypothesis(Hypothesis):
             return max(set(closest_labels), key=closest_labels.count)
         return classify
 
+    def name(self):
+        return "ChunkyKNNHypothesis (k=" + str(self._k) + ")"
+
     def get_guess(self, vector):
         return self._classifier(vector)
 

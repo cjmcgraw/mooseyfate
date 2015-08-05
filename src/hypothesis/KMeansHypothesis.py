@@ -18,8 +18,8 @@ class KMeansHypothesis(Hypothesis):
         self._points = {i : [] for i in range(k)}
         self._sub_hypothesis = sub_hypothesis
 
-    def getName(self):
-        return "KMeansHypothesis"
+    def name(self):
+        return "KMeansHypothesis (k=" + str(len(self._centroids)) + ")"
 
     def get_guess(self, vector):
         index = self.index_of_nearest_centroid(vector)
@@ -27,7 +27,7 @@ class KMeansHypothesis(Hypothesis):
 
     def update(self, vector, attacked, outcome):
         super(KMeansHypothesis, self).update(vector, attacked, outcome)
-        
+
         for hyp in self._sub_hypothesis:
             hyp.update(vector, attacked, outcome)
 

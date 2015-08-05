@@ -415,7 +415,6 @@ class DecisionerIntegrationTest(unittest.TestCase):
 #                             drP5,
 #                             drP7,
 #                             drP11,
-                             trace=True
                             )
 
         def create_monster():
@@ -439,7 +438,6 @@ class DecisionerIntegrationTest(unittest.TestCase):
 
         for i in range(1000):
             monster = create_monster()
-            print(vars(monster))
 
             guess = self.decisioner.get_guess(monster.color)
             outcome = monster.action(guess)
@@ -447,10 +445,6 @@ class DecisionerIntegrationTest(unittest.TestCase):
 
             maximum_value -= monster._aggressive
             actual_value += outcome
-
-        print('Maximum value = ' + str(maximum_value))
-        print('Actual value = ' + str(actual_value))
-        print('Ratio = ' + str(actual_value / maximum_value))
 #
 #    def test_GroupAggroByColorAndProbability_WithWimpyBraveKNNAndKMeans(self):
 #        brave = BraveHypothesis()
