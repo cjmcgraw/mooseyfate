@@ -126,7 +126,8 @@ if __name__ == "__main__":
 #            DrPerceptron(5),
             ]
 
-    decisioner = Decisioner(hyps, trace=True)
+    training_window = 100
+    decisioner = Decisioner(hyps, training_window=training_window, trace=True)
 
     maximum_outcome = 0.0
     total_aggressive = 0.0
