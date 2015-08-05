@@ -77,6 +77,9 @@ class DrPerceptron(Hypothesis):
         #print ("DBG PERCEPTRON: " + str(result))
         boolresult =  result > self._threshold
         return boolresult
+    
+    def name(self):
+        return "DrPerceptron"
 
     def get_guess(self, vector):
         """

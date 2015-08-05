@@ -11,7 +11,7 @@ class WimpyHypothesis(Hypothesis):
         self._n = 0.0
         self._limiting = 100
 
-    def getName(self):
+    def name(self):
         return "WimpyHypothesis"
 
     def fitness(self):

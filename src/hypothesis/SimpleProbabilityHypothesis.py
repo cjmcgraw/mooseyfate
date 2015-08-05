@@ -14,8 +14,8 @@ class SimpleProbabilityHypothesis(Hypothesis):
         self._training_n = 0
         self._training_hits = 0.0
 
-    def getName(self):
-        return "SimpleProbabilityHypothesis"
+    def name(self):
+        return "SimpleProbabilityHypothesis (p = " + str(self.p_value()) + ")"
 
     def get_guess(self, vector):
         if random() <= self.p_value():

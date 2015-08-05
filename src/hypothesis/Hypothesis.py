@@ -22,6 +22,11 @@ class Hypothesis:
         return self._success / self._n
 
     @abstractmethod
+    def name(self):
+        """Get the name of the hypothesis"""
+        pass
+
+    @abstractmethod
     def get_guess(self, vector):
         """Get the next guess of the hypothesis representing
         if an attack should be made, or not

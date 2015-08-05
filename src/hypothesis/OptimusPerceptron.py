@@ -84,6 +84,9 @@ class OptimusPerceptron(Hypothesis):
         boolresult =  result > self._threshold
         return boolresult
 
+    def name(self):
+        return "OptimusPerceptron"
+
     def get_guess(self, vector):
         """
         Get the guess for a vector

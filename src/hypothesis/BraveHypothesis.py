@@ -10,7 +10,7 @@ class BraveHypothesis(Hypothesis):
         self._n = 0
         self._hits = 0.0
 
-    def get_name(self):
+    def name(self):
         return "BraveHypothesis"
 
     def fitness(self):

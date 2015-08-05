@@ -27,8 +27,11 @@ class Decisioner(Hypothesis):
         if(self._trace):
             print(msg)
 
+    def name(self):
+        return "Decisioner: " + self.get_best_fit_hypothesis().name()
+
     def fitness(self):
-        return self.get_best_fit_hypothesis.fitness()
+        return self.get_best_fit_hypothesis().fitness()
 
     def get_best_fit_hypothesis(self):
         """Gets the hypothesis that is the best fit
@@ -38,7 +41,7 @@ class Decisioner(Hypothesis):
         hyp = sorted(self.all_hypothesis, key=lambda h: h.fitness(), reverse=True)
         self.println("All fitnesses in expected order and by class")
         for h in hyp:
-            self.println(type(h).__name__ +  ' = ' + str(h.fitness()))
+            self.println(h.name() +  ' = ' + str(h.fitness()))
         self.println('')
         return hyp[0]
 
@@ -58,7 +61,7 @@ class Decisioner(Hypothesis):
         best_hypothesis = self.get_best_fit_hypothesis()
         guess = best_hypothesis.get_guess(vector)
 
-        self.println("Best fit hypothesis: " + str(type(best_hypothesis).__name__))
+        self.println("Best fit hypothesis: " + str(best_hypothesis.name()))
         self.println("Guess: " + str(guess))
         self.println('')
 
@@ -84,3 +87,100 @@ class Decisioner(Hypothesis):
             hypothesis.update(vector, attacked, outcome)
         self._window -= 1
 
+if __name__ == "__main__":
+    from random import randint, random
+    from src.lib.TestingEnvironment import Monster
+
+    from src.hypothesis.BraveHypothesis import BraveHypothesis
+    from src.hypothesis.WimpyHypothesis import WimpyHypothesis
+    from src.hypothesis.KNearestNeighbors import KNearestNeighbors
+    from src.hypothesis.DrPerceptron import DrPerceptron
+    from src.hypothesis.OptimusPerceptron import OptimusPerceptron
+    from src.hypothesis.SimpleProbabilityHypothesis import SimpleProbabilityHypothesis
+    from src.hypothesis.RandoHypothesis import RandoHypothesis
+
+
+    def create_monster():
+        color = randint(1, 100)
+
+        if color < 70:
+            if random() < 0.3:
+                return Monster(1, [color], 'aggressive')
+            return Monster(0, [color], 'passive')
+        else:
+            if random() < 0.7:
+                return Monster(1, [color], 'aggressive')
+            return Monster(0, [color], 'passive')
+
+    hyps = [BraveHypothesis(),
+            WimpyHypothesis(),
+            KNearestNeighbors(3),
+            KNearestNeighbors(5),
+            KNearestNeighbors(7),
+            KNearestNeighbors(11),
+            KNearestNeighbors(17),
+            KNearestNeighbors(31),
+            SimpleProbabilityHypothesis(),
+            RandoHypothesis(),
+#            OptimusPerceptron(5),
+#            DrPerceptron(5),
+            ]
+
+    decisioner = Decisioner(hyps, trace=True)
+
+    maximum_outcome = 0.0
+    total_aggressive = 0.0
+    total_passive = 0.0
+
+    actual_outcome = 0.0
+
+    guessed_aggressive = 0.0
+    guessed_passive = 0.0
+
+    n = 5000
+
+    for i in range(n):
+        monster = create_monster()
+
+        if monster._aggressive == 1:
+            total_aggressive += 1
+        else:
+            maximum_outcome += 1
+            total_passive += 1
+
+        guess = decisioner.get_guess(monster.color)
+
+        if not guess:
+            guessed_passive += 1
+        else:
+            guessed_aggressive += 1
+
+        outcome = monster.action(guess)
+        actual_outcome += outcome
+        decisioner.update(monster.color, guess, outcome)
+
+    decisioner._trace = False
+    print('======================================')
+    print('Total aggressives:   ' + str(total_aggressive) + ' (' + str(total_aggressive / n) + ')')
+    print('Total passives:      ' + str(total_passive) + ' (' + str(total_passive / n) + ')')
+    print('')
+    print('Guessed aggressives: ' + str(guessed_aggressive) + ' (' + str(guessed_aggressive / n) + ')')
+    print('Guessed passives:    ' + str(guessed_passive) + ' (' + str(guessed_passive / n) + ')')
+    print('')
+
+    agg_diff = guessed_aggressive - total_aggressive
+
+    if agg_diff > 0:
+        print ('    We incorrectly categorized ' + str(abs(agg_diff)) + ' passives as aggressive (' + str(agg_diff / n) + ')')
+    else:
+        print ('    We incorrectly categorized ' + str(abs(agg_diff)) + ' aggressives as passive (' + str(agg_diff / n) + ')')
+
+    print('')
+    print('')
+
+    print('Total categorized correctly: ' + str(n - abs(agg_diff)) + ' (' + str((n - abs(agg_diff)) / n) + ')' )
+    print('Final hypothesis fitness:    ' + str(decisioner.fitness()))
+    print('')
+    print('maximum outcome value: ' + str(maximum_outcome) + ' (' + str(maximum_outcome / n) + ')')
+    print('actual outcome value:  ' + str(actual_outcome) + ' (' + str(actual_outcome / n) + ')')
+    print('outcome ratio:         ' + str(actual_outcome / maximum_outcome))

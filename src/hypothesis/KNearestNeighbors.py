@@ -16,6 +16,9 @@ class KNearestNeighbors(Hypothesis):
 
         self._k = k
 
+    def name(self):
+        return "KNearestNeighbors (k=" + str(self._k) + ")"
+
     def get_guess(self, vector):
         # If we haven't obtained atleast k values of
         # our window then we should use true instead

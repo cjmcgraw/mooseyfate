@@ -11,7 +11,7 @@ class RandoHypothesis(Hypothesis):
         self._limiting = 100
         self._lastGuess = False
 
-    def getName(self):
+    def name(self):
         return "RandoHypothesis"
 
     def fitness(self):

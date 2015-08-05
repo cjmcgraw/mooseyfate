@@ -385,6 +385,72 @@ class DecisionerIntegrationTest(unittest.TestCase):
         # Finally we expect that the standard KNN process will obtain
         # within 10 percent margin of the best possible solution
         self.assertGreater(actual_value / maximum_value, 0.9)
+
+    def test_with_all_hypothesis(self):
+        brave = BraveHypothesis()
+        wimpy = WimpyHypothesis()
+
+        knn3 = KNearestNeighbors(3)
+        knn5 = KNearestNeighbors(5)
+        knn7 = KNearestNeighbors(7)
+        knn11 = KNearestNeighbors(11)
+
+        rando = RandoHypothesis()
+        prob = SimpleProbabilityHypothesis()
+
+#        drP3 = OptimusPerceptron(11)
+#        drP5 = DrPerceptron(5)
+#        drP7 = DrPerceptron(7)
+#        drP11 = DrPerceptron(11)
+#
+        self.setUpDecisioner(brave,
+                             wimpy,
+                             knn3,
+                             knn5,
+                             knn7,
+                             knn11,
+                             rando,
+                             prob,
+#                             drP3,
+#                             drP5,
+#                             drP7,
+#                             drP11,
+                             trace=True
+                            )
+
+        def create_monster():
+            color = randint(1, 100)
+
+            if color < 70:
+                if random() >= 0.3:
+                    return Monster(0, [color], 'passive')
+                return Monster(1, [color], 'aggressive')
+            else:
+                if random() >= 0.7:
+                    return Monster(0, [color], 'passive')
+                return Monster(1, [color], 'aggressive')
+
+        for i in range(100):
+            monster = create_monster()
+            self.decisioner.update(monster.color, 1, monster.action(True))
+
+        maximum_value = 1000.0
+        actual_value = 0.0
+
+        for i in range(1000):
+            monster = create_monster()
+            print(vars(monster))
+
+            guess = self.decisioner.get_guess(monster.color)
+            outcome = monster.action(guess)
+            self.decisioner.update(monster.color, guess, outcome)
+
+            maximum_value -= monster._aggressive
+            actual_value += outcome
+
+        print('Maximum value = ' + str(maximum_value))
+        print('Actual value = ' + str(actual_value))
+        print('Ratio = ' + str(actual_value / maximum_value))
 #
 #    def test_GroupAggroByColorAndProbability_WithWimpyBraveKNNAndKMeans(self):
 #        brave = BraveHypothesis()
