@@ -7,22 +7,20 @@ from src.lib.HelperFunctions import dot_product
 
 class OptimusPerceptron(Hypothesis):
 
-    def __init__(self, windowSize=100):
-        self._name = "OptimusPerceptron"
-        self._window = windowSize
+    def __init__(self, windowSize=5):
         self._windowN = 0
 
         """ Note: _inputList is the list of inputs and the historical
                   window of inputs on which to train _weights.  Current implementation
                   is a sliding window in a modded universe defined by self._windowSize
         """
-        self._windowSize = 5
+        self._windowSize = windowSize
         self._inputList =  [0] * self._windowSize
         self._inputIdx = 0
         self._inputSize = self._windowSize
         self._weightsSize = self._windowSize
         self._weights = [0] * self._weightsSize
-        self._name = self._name + "[numInputs:" + str(self._inputSize) + "]"
+        self._name =  "OptimusPerceptron" + "[numInputs:" + str(self._inputSize) + "]"
 
         self._wins = 0;
         self._n = 1;
@@ -36,15 +34,21 @@ class OptimusPerceptron(Hypothesis):
         # save all interactions and add them to training
         self._training_set = []
         # don't remember everything, just the last 300 inputs
-        self._max_training_set_size = 300
+        self._max_training_set_size = 3
         # our learning rate is small, here's the max amount of reps to train the neuron
-        self._trainForAtLeastThisManyReps = 400
+        self._trainForAtLeastThisManyReps = 2
+
+        # set weights to be random
+        self._randoWeights()
 
     def __str__(self):
         sReturn = "OptimusPerceptron Hypothesis: "+self._name+"\n"
         sReturn += "\tInput: "+str(self._inputList) +"\n"
         sReturn += "\tWeights: "+str(self._weights) +"\n"
         return sReturn
+
+    def name(self):
+        return self._name
 
     def _train(self):
         ## Undertrain as we are limiting the reps we are trianing for
@@ -83,9 +87,6 @@ class OptimusPerceptron(Hypothesis):
         #print ("DBG PERCEPTRON: " + str(result))
         boolresult =  result > self._threshold
         return boolresult
-
-    def name(self):
-        return "OptimusPerceptron"
 
     def get_guess(self, vector):
         """
@@ -131,9 +132,10 @@ class OptimusPerceptron(Hypothesis):
         training_chunk = (self._inputList, boolOutcome)
         self._training_set.append(training_chunk)
 
-        if len(self._training_set) > self._max_training_set_size+self._windowSize:
+        # ... limit the amount of chunks added with input-size padding
+        if len(self._training_set) > self._max_training_set_size+self._inputSize:
             #forget some of the earlier training data
-            for deleteWindow in range(self._windowSize):
+            for deleteWindow in range(self._inputSize):
                 self._training_set.pop(0)
 
         # 4.) train
