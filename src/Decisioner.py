@@ -122,9 +122,10 @@ if __name__ == "__main__":
             KNearestNeighbors(31),
             SimpleProbabilityHypothesis(),
             RandoHypothesis(),
+            OptimusPerceptron(5),  # mod 3 universe
             OptimusPerceptron(3),  # mod 3 universe
-            OptimusPerceptron(2),  # even universe
-            #OptimusPerceptron(1), # lonliest number universe
+            #OptimusPerceptron(2), # even universe
+            #OptimusPerceptron(1), # lonliest number universe, interesting but not a good idea
             ]
 
     training_window = 100
