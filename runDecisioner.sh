@@ -1,0 +1,1 @@
+ python -m src.Decisioner > output.txt && tail output.txt
