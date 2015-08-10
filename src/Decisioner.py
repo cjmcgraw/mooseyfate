@@ -169,7 +169,7 @@ if __name__ == "__main__":
 
         guess = decisioner.get_guess(monster.color)
 
-        if not guess:
+        if guess:
             guessed_passive += 1
         else:
             guessed_aggressive += 1
