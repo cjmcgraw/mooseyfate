@@ -135,13 +135,13 @@ if __name__ == "__main__":
             OptimusPerceptron(31),  # mod 31 universe
             OptimusPerceptron(29),  # mod 29 universe
             OptimusPerceptron(23),  # mod 23 universe
-            OptimusPerceptron(17),  # mod 17 universe
-            OptimusPerceptron(11),  # mod 11 universe
-            OptimusPerceptron(7),  # mod 7 universe
+            # OptimusPerceptron(17),  # mod 17 universe
+            # OptimusPerceptron(11),  # mod 11 universe
+            # OptimusPerceptron(7),  # mod 7 universe
             OptimusPerceptron(5),  # mod 5 universe
-            OptimusPerceptron(3),  # mod 3 universe
-            OptimusPerceptron(2), # even universe
-            OptimusPerceptron(1), # lonliest number universe, interesting but not a good idea
+            # OptimusPerceptron(3),  # mod 3 universe
+            # OptimusPerceptron(2), # even universe
+            # OptimusPerceptron(1), # lonliest number universe, interesting but not a good idea
             ]
 
     training_window = 100
@@ -187,7 +187,7 @@ if __name__ == "__main__":
         if (outcome == -1):
             k_n_one += 1
         decisioner.update(monster.color, guess, outcome)
-        print ('@Guess:'+str(guess)+' outcome:'+str(outcome))
+        #print ('@Guess:'+str(guess)+' outcome:'+str(outcome))
         print ('@cumulative :'+str(k_zero+k_one+k_n_one))
         print ('      : k(Zeros)= '+str(k_zero))
         print ('      : k(Ones)= '+str(k_one))
@@ -195,6 +195,7 @@ if __name__ == "__main__":
 
     decisioner._trace = False
 
+    # how much we guessed minus how much there actually was
     agg_diff = guessed_aggressive - total_aggressive
     passive_diff = guessed_passive - total_passive
 
@@ -203,21 +204,30 @@ if __name__ == "__main__":
     print ('      : k(Zeros)= '+str(k_zero))
     print ('      : k(Ones)= '+str(k_one))
     print ('      : k(NegOne)= '+str(k_n_one))
-    print ('score hits on this many monsters : ' + str(k_one-k_n_one) + 'AND dodged this many monsters: ' + str(k_zero))
-    print('Total aggressives:   ' + str(total_aggressive) + ' (% of total : ' + str(total_aggressive / n) + ')')
+    print ('score hits on this many monsters : ' + str(k_one-k_n_one) + ' AND dodged this many monsters: ' + str(k_zero))
+    print('Total aggressives:   ' + str(total_aggressive) + ' (% of total : ' + str(100*total_aggressive / n) + ')')
     misclass_aggro = abs(agg_diff)/total_aggressive
-    print(' misclassified aggressives: abs(guessed aggro - total aggro) / total aggro =' + str(misclass_aggro))
+    print(' misclassified aggressives: abs(guessed aggro - total aggro) / total aggro              =' + str(misclass_aggro))
     print(' positively classified aggressives: 1- (abs(guessed aggro - total aggro) / total aggro) =' + str(1-misclass_aggro))
     misclass_passive = abs(passive_diff)/total_passive
-    print('Total passives:      ' + str(total_passive) + ' (% of total : ' + str(total_passive / n) + ')')
-    print(' misclassified passives: abs(guessed passive - total passive) / total passive =' + str(misclass_passive))
+    print('Total passives:      ' + str(total_passive) + ' (% of total : ' + str(100*total_passive / n) + ')')
+    print(' misclassified passives: abs(guessed passive - total passive) / total passive             =' + str(misclass_passive))
     print(' positively classified passives: 1-(abs(guessed passive - total passive) / total passive) =' + str(1-misclass_passive))
     success_mean = float(abs(1-misclass_aggro) + abs(1-misclass_passive)) /2.0
+    failure_mean = float(abs(misclass_aggro) + abs(misclass_passive)) /2.0
+    print(' ')
     print('score                                     : ' + str(k_one-k_n_one))
-    print('max potential score (assume no aggressive): ' + str(k_one))
-    print('success ratio: score/max score = ' + str(float(k_one-k_n_one)/float(total_passive)) )
-    print('successful classification mean: (classified aggressives + classified passives)/2 = ' + str(success_mean))
+    print('max potential score (assume no aggressive): ' + str(total_passive))
+    print(' ')
+    print('success ratio:                                                   score/max score       = ' + str(float(k_one-k_n_one)/float(total_passive)) )
+    print('successful classification mean: (classified aggressives + classified passives)/2       = ' + str(success_mean))
+    print('   failure classification mean: (misclassified aggressives + misclassified passives)/2 = ' + str(failure_mean))
+    print('Final hypothesis fitness                                                               = ' + str(decisioner.fitness()))
+    print(' ')
+    print(' ')
 
+
+    print(' ')
     print('====================================== Carl Analysis =============')
     print('Total aggressives:   ' + str(total_aggressive) + ' (' + str(total_aggressive / n) + ')')
     print('Total passives:      ' + str(total_passive) + ' (' + str(total_passive / n) + ')')
