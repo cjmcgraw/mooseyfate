@@ -199,24 +199,24 @@ if __name__ == "__main__":
     passive_diff = guessed_passive - total_passive
 
     print('====================================== Mike Analysis =============')
-    print ('@analysis for cardenality :'+str(k_zero+k_one+k_n_one))
+    print ('@analysis for cardinality :'+str(k_zero+k_one+k_n_one))
     print ('      : k(Zeros)= '+str(k_zero))
     print ('      : k(Ones)= '+str(k_one))
     print ('      : k(NegOne)= '+str(k_n_one))
-    print ('score : ' + str(k_one-k_n_one) + ' dodged : ' + str(k_zero))
+    print ('score hits on this many monsters : ' + str(k_one-k_n_one) + 'AND dodged this many monsters: ' + str(k_zero))
     print('Total aggressives:   ' + str(total_aggressive) + ' (% of total : ' + str(total_aggressive / n) + ')')
     misclass_aggro = abs(agg_diff)/total_aggressive
-    print('Total misclassified aggressives: abs(guessed aggro - total aggro) / total aggro =' + str(misclass_aggro))
-    print('Total positively classified aggressives: 1- (abs(guessed aggro - total aggro) / total aggro) =' + str(1-misclass_aggro))
+    print(' misclassified aggressives: abs(guessed aggro - total aggro) / total aggro =' + str(misclass_aggro))
+    print(' positively classified aggressives: 1- (abs(guessed aggro - total aggro) / total aggro) =' + str(1-misclass_aggro))
     misclass_passive = abs(passive_diff)/total_passive
     print('Total passives:      ' + str(total_passive) + ' (% of total : ' + str(total_passive / n) + ')')
-    print('Total misclassified passives: abs(guessed passive - total passive) / total passive =' + str(misclass_passive))
-    print('Total positively classified passives: 1-(abs(guessed passive - total passive) / total passive) =' + str(1-misclass_passive))
+    print(' misclassified passives: abs(guessed passive - total passive) / total passive =' + str(misclass_passive))
+    print(' positively classified passives: 1-(abs(guessed passive - total passive) / total passive) =' + str(1-misclass_passive))
     success_mean = float(abs(1-misclass_aggro) + abs(1-misclass_passive)) /2.0
     print('score                                     : ' + str(k_one-k_n_one))
     print('max potential score (assume no aggressive): ' + str(k_one))
     print('success ratio: score/max score = ' + str(float(k_one-k_n_one)/float(total_passive)) )
-    print('success mean: (classified aggressives + classified passives)/2 = ' + str(success_mean))
+    print('successful classification mean: (classified aggressives + classified passives)/2 = ' + str(success_mean))
 
     print('====================================== Carl Analysis =============')
     print('Total aggressives:   ' + str(total_aggressive) + ' (' + str(total_aggressive / n) + ')')
