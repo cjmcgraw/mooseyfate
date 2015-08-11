@@ -36,10 +36,18 @@ class Monster(object):
 
     def action(self, should_attack):
         """Act on the monster"""
+
+        # if you're doing nothing return 0
         if not should_attack:
             return 0
+
+        # if the monster is aggressive and you
+        # clearly have decided not to refrain from attacking
+        # then you get a negative point
         if self._aggressive:
             return -1
+
+        # after attacking a non-aggressive you get a point
         return 1
 
 def monster_generator():
