@@ -135,13 +135,13 @@ if __name__ == "__main__":
             OptimusPerceptron(31),  # mod 31 universe
             OptimusPerceptron(29),  # mod 29 universe
             OptimusPerceptron(23),  # mod 23 universe
-            # OptimusPerceptron(17),  # mod 17 universe
-            # OptimusPerceptron(11),  # mod 11 universe
-            # OptimusPerceptron(7),  # mod 7 universe
+            OptimusPerceptron(17),  # mod 17 universe
+            OptimusPerceptron(11),  # mod 11 universe
+            OptimusPerceptron(7),  # mod 7 universe
             OptimusPerceptron(5),  # mod 5 universe
-            # OptimusPerceptron(3),  # mod 3 universe
-            # OptimusPerceptron(2), # even universe
-            # OptimusPerceptron(1), # lonliest number universe, interesting but not a good idea
+            OptimusPerceptron(3),  # mod 3 universe
+            OptimusPerceptron(2), # even universe
+            OptimusPerceptron(1), # lonliest number universe, interesting but not a good idea
             ]
 
     training_window = 100
