@@ -156,6 +156,10 @@ if __name__ == "__main__":
     guessed_aggressive = 0.0
     guessed_passive = 0.0
 
+    k_n_one = 0
+    k_zero = 0
+    k_one = 0
+
     n = 5000
 
     for i in range(n):
@@ -176,30 +180,80 @@ if __name__ == "__main__":
 
         outcome = monster.action(guess)
         actual_outcome += outcome
+        if (outcome == 0):
+            k_zero += 1
+        if (outcome == 1):
+            k_one += 1
+        if (outcome == -1):
+            k_n_one += 1
         decisioner.update(monster.color, guess, outcome)
+        #print ('@Guess:'+str(guess)+' outcome:'+str(outcome))
+        print ('@cumulative :'+str(k_zero+k_one+k_n_one))
+        print ('      : k(Zeros)= '+str(k_zero))
+        print ('      : k(Ones)= '+str(k_one))
+        print ('      : k(NegOne)= '+str(k_n_one))
 
     decisioner._trace = False
-    print('======================================')
+
+    # how much we guessed minus how much there actually was
+    agg_diff = guessed_aggressive - total_aggressive
+    passive_diff = guessed_passive - total_passive
+
+    print('====================================== Mike Analysis =============')
+    print ('@analysis for cardinality :'+str(k_zero+k_one+k_n_one))
+    print ('      : k(Zeros)= '+str(k_zero))
+    print ('      : k(Ones)= '+str(k_one))
+    print ('      : k(NegOne)= '+str(k_n_one))
+    print ('score hits on this many monsters : ' + str(k_one-k_n_one) + ' AND dodged this many monsters: ' + str(k_zero))
+    print('Total aggressives:   ' + str(total_aggressive) + ' (% of total : ' + str(100*total_aggressive / n) + ')')
+    misclass_aggro = abs(agg_diff)/total_aggressive
+    print(' misclassified aggressives: abs(guessed aggro - total aggro) / total aggro              =' + str(misclass_aggro))
+    print(' positively classified aggressives: 1- (abs(guessed aggro - total aggro) / total aggro) =' + str(1-misclass_aggro))
+    misclass_passive = abs(passive_diff)/total_passive
+    print('Total passives:      ' + str(total_passive) + ' (% of total : ' + str(100*total_passive / n) + ')')
+    print(' misclassified passives: abs(guessed passive - total passive) / total passive             =' + str(misclass_passive))
+    print(' positively classified passives: 1-(abs(guessed passive - total passive) / total passive) =' + str(1-misclass_passive))
+    success_mean = float(abs(1-misclass_aggro) + abs(1-misclass_passive)) /2.0
+    failure_mean = float(abs(misclass_aggro) + abs(misclass_passive)) /2.0
+    print(' ')
+    print('score                                     : ' + str(k_one-k_n_one))
+    print('max potential score (assume no aggressive): ' + str(total_passive))
+    print(' ')
+    print('success ratio:                                                   score/max score       = ' + str(float(k_one-k_n_one)/float(total_passive)) )
+    print('successful classification mean: (classified aggressives + classified passives)/2       = ' + str(success_mean))
+    print('   failure classification mean: (misclassified aggressives + misclassified passives)/2 = ' + str(failure_mean))
+    print('Final hypothesis fitness                                                               = ' + str(decisioner.fitness()))
+    print(' ')
+    print(' ')
+
+
+    print(' ')
+    print('====================================== Carl Analysis =============')
     print('Total aggressives:   ' + str(total_aggressive) + ' (' + str(total_aggressive / n) + ')')
     print('Total passives:      ' + str(total_passive) + ' (' + str(total_passive / n) + ')')
     print('')
     print('Guessed aggressives: ' + str(guessed_aggressive) + ' (' + str(guessed_aggressive / n) + ')')
     print('Guessed passives:    ' + str(guessed_passive) + ' (' + str(guessed_passive / n) + ')')
     print('')
+    print('guessed aggro - total aggro = ' + str(agg_diff) + ' missed points')
+    print('guessed_passive - total passive = ' + str(passive_diff) + ' miscategorized passive')
+    print('Total passive - Agressives we lost points to('+str(agg_diff)+') = Score:' + str(total_passive - agg_diff))
+    print('')
 
-    agg_diff = guessed_aggressive - total_aggressive
+
+
 
     if agg_diff > 0:
         print ('    We incorrectly categorized ' + str(abs(agg_diff)) + ' passives as aggressive (' + str(agg_diff / n) + ')')
     else:
         print ('    We incorrectly categorized ' + str(abs(agg_diff)) + ' aggressives as passive (' + str(agg_diff / n) + ')')
-
     print('')
     print('')
 
     print('Total categorized correctly: ' + str(n - abs(agg_diff)) + ' (' + str((n - abs(agg_diff)) / n) + ')' )
     print('Final hypothesis fitness:    ' + str(decisioner.fitness()))
     print('')
+    print('ratio of total passive to number monsters : ' + str(total_passive/n) )
     print('maximum outcome value: ' + str(maximum_outcome) + ' (' + str(maximum_outcome / n) + ')')
     print('actual outcome value:  ' + str(actual_outcome) + ' (' + str(actual_outcome / n) + ')')
     print('outcome ratio:         ' + str(actual_outcome / maximum_outcome))
