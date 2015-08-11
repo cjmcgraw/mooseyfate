@@ -247,8 +247,6 @@ if __name__ == "__main__":
         print ('    We incorrectly categorized ' + str(abs(agg_diff)) + ' passives as aggressive (' + str(agg_diff / n) + ')')
     else:
         print ('    We incorrectly categorized ' + str(abs(agg_diff)) + ' aggressives as passive (' + str(agg_diff / n) + ')')
-    print ('    Theoretical Score = Total Passives(aka. max-score) - Miscategorized Aggro that cost us points = ' + str(total_passive - abs(agg_diff)) )
-    print ('    Theoretical Ratio = Theoretical Score / Total Passives(aka. max-score) =' +  str((total_passive - abs(agg_diff))/total_passive)  )
     print('')
     print('')
 
