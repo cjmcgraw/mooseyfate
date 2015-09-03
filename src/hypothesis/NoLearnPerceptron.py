@@ -1,5 +1,6 @@
-"""
-"""
+""" Note: No learn was an experiment that didn't get added into the list.
+""" Idea: Create a random weighted perceptron.
+""" Variations (in comments): if the fitness is bad, roll the dice again with random weights.
 import random
 from Hypothesis import Hypothesis
 
