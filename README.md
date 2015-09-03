@@ -1,30 +1,57 @@
 To run the specific modules for your project execute them using pythons module command above the root of the project:
 ```
-[~/workspace/lab/ml]$ tree -I '.*egg-info|.*pyc|__init.*'
 .
-└── mooseyfate
-    ├── README.md
-    ├── setup.py
-    ├── src
-    │   ├── Decisioner.py
-    │   ├── hypothesis
-    │   │   ├── BraveHypothesis.py
-    │   │   ├── ChunkyWimpyHypothesis.py
-    │   │   ├── Hypothesis.py
-    │   │   ├── KMeansHypothesis.py
-    │   │   ├── SimpleProbabilityHypothesis.py
-    │   │   └── WimpyHypothesis.py
-    │   └── lib
-    │       ├── HelperFunctions.py
-    │       └── TestingEnvironment.py
-    └── test
-        ├── DecisionerTest.py
-        ├── hypothesis
-        │   └── MockHypothesis.py
-        └── lib
-            └── HelperFunctionsTest.py
+├── README.md
+├── doc
+│   ├── Hypo_oneRun_k11pt699_optpcp1ptpt680.mov
+│   ├── ML\ -\ Hackathon.pptx
+│   ├── ML\ -\ TimeSeriesPerceptron_themed.pptx
+│   ├── json_ArrayOfObjects_final.json
+│   └── ml-presentation-addendum.pptx
+├── json_output.json
+├── json_output.json.bak
+├── json_output_final.json
+├── mooseyfate.egg-info
+│   └── PKG-INFO
+├── runDecisioner.sh
+├── setup.py
+├── src
+│   ├── Decisioner.py
+│   ├── hypothesis
+│   │   ├── BraveHypothesis.py
+│   │   ├── ChunkyKNNHypothesis.py
+│   │   ├── ChunkyWimpyHypothesis.py
+│   │   ├── DrPerceptron.py
+│   │   ├── Hypothesis.py
+│   │   ├── HypothesisCollection.py
+│   │   ├── KMeansHypothesis.py
+│   │   ├── KNearestNeighbors.py
+│   │   ├── NoLearnPerceptron.py
+│   │   ├── OptimusPerceptron.py
+│   │   ├── RandoHypothesis.py
+│   │   ├── SimpleProbabilityHypothesis.py
+│   │   └── WimpyHypothesis.py
+│   └── lib
+│       ├── HelperFunctions.py
+│       └── TestingEnvironment.py
+└── test
+    ├── DecisionerIntegrationTest.py
+    ├── DecisionerTest.py
+    ├── hypothesis
+    │   ├── BraveHypothesisTest.py
+    │   ├── ChunkyKNNHypothesisTest.py
+    │   ├── DrPerceptronHypothesisTest.py
+    │   ├── KMeansHypothesisTest.py
+    │   ├── KNearestNeighborsTest.py
+    │   ├── MockHypothesis.py
+    │   ├── OptimusPerceptronHypothesisTest.py
+    │   ├── RandoHypothesisTest.py
+    │   ├── SimpleProbabilityHypothesisTest.py
+    │   └── WimpyHypothesisTest.py
+    └── lib
+        └── HelperFunctionsTest.py
 
-7 directories, 14 files
+8 directories, 41 files
 
 [~/workspace/lab/ml]$ python -m mooseyfate.src.hypothesis.KMeansHypothesis
 ```
